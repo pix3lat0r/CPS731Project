@@ -46,7 +46,7 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        ref = db.collection("users").document();
+        ref = db.collection("users").document("email");
 
         progress2 = findViewById(R.id.progressBar2);
         register = findViewById(R.id.btnRegister);
@@ -77,14 +77,15 @@ public class SignUp extends AppCompatActivity {
                             progress2.setVisibility(View.VISIBLE);
                             if (documentSnapshot.exists()){
                                 Toast.makeText(SignUp.this, "Sorry,this user already exists", Toast.LENGTH_SHORT).show();
+                                progress2.setVisibility(View.INVISIBLE);
                             }else{
-                                Map<String, Object> users = new HashMap<>();
-                                users.put(NAME_KEY, reg_name);
-                                users.put(EMAIL_KEY, reg_email);
-                                users.put(PASSWORD_KEY, reg_password);
+                                Map<String, Object> newuser = new HashMap<>();
+                                newuser.put(NAME_KEY, reg_name);
+                                newuser.put(EMAIL_KEY, reg_email);
+                                newuser.put(PASSWORD_KEY, reg_password);
 
                                 db.collection("users")
-                                        .add(users)
+                                        .add(newuser)
                                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                             @Override
                                             public void onSuccess(DocumentReference documentReference) {
