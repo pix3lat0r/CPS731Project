@@ -3,4 +3,6 @@
     <string name="txtIngredient">Add Ingredient</string>
     <string name="btnAdd">ADD</string>
     <string name="txtResult"></string>
+    <string name="whatToEatTitle">What do you want to eat?</string>
+    <string name="btnGo">GO</string>
 </resources>
