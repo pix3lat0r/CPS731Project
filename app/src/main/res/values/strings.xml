@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">CPS731Project</string>
-    <string name="txtIngredient">Add Ingredient</string>
+    <string name="addIngredient">Add Ingredient</string>
     <string name="btnAdd">ADD</string>
-    <string name="txtResult"></string>
     <string name="whatToEat">What do you want to eat?</string>
+    <string name="ingredientsYouHave">Ingredients You Have</string>
     <string name="btnGo">GO</string>
     <string-array name="meals">
         <item>Snack</item>

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        enteredIngredient = findViewById(R.id.txtIngredient);
+        enteredIngredient = findViewById(R.id.addIngredient);
     }
 
 

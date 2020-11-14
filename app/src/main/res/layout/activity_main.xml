@@ -7,44 +7,63 @@
     android:padding="20dp"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/txtIngredient"
+    <TextView
+        android:id="@+id/ingredientsYouHave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/txtIngredient"
-        android:padding="40dp"
-        android:textSize="28sp"
+        android:layout_marginBottom="395dp"
+        android:layout_marginTop="168dp"
+        android:text="@string/ingredientsYouHave"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.268"
-        tools:text="@string/txtIngredient" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/addIngredient"
+        android:layout_width="207dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:hint="@string/addIngredient"
+        android:inputType="text"
+        app:layout_constraintEnd_toStartOf="@+id/btnAdd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsYouHave" />
 
     <Button
         android:id="@+id/btnAdd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:text="ADD"
+        android:layout_width="62dp"
+        android:layout_height="45dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="45dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="20dp"
         android:onClick="addIngredient"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="@string/btnAdd"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtIngredient"
-        app:layout_constraintVertical_bias="0.178" />
+        app:layout_constraintStart_toEndOf="@+id/addIngredient"
+        app:layout_constraintTop_toBottomOf="@+id/ingredientsYouHave" />
 
     <TextView
         android:id="@+id/txtResult"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textSize="24sp"
+        android:layout_width="87dp"
+        android:layout_height="29dp"
+        android:layout_marginBottom="267dp"
+        android:layout_marginEnd="245dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="245dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="35dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd"
+        app:layout_constraintTop_toBottomOf="@+id/addIngredient"
         tools:text="@string/txtResult" />
 </androidx.constraintlayout.widget.ConstraintLayout>
