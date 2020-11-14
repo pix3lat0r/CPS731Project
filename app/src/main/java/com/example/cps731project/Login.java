@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,10 +19,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class Login extends AppCompatActivity {
 
-    private Button login;
     private EditText email;
     private EditText password;
-    private TextView createAcc;
     private ProgressBar progress;
 
     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -36,7 +32,7 @@ public class Login extends AppCompatActivity {
 
         email = findViewById(R.id.loginEmail);
         password = findViewById(R.id.loginPassword);
-        login = findViewById(R.id.btnLogin);
+        Button login = findViewById(R.id.btnLogin);
         progress = findViewById(R.id.progressBar);
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -45,9 +41,9 @@ public class Login extends AppCompatActivity {
                 final String logEmail = email.getText().toString();
                 final String logPass = password.getText().toString();
 
-                if (logEmail.equals("")) {
+                if (logEmail != null && !logEmail.isEmpty()) {
                     Toast.makeText(Login.this, "Please enter valid email", Toast.LENGTH_SHORT).show();
-                } else if (logPass.equals("")) {
+                } else if (logPass != null && !logPass.isEmpty()) {
                     Toast.makeText(Login.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
                 }
                 progress.setVisibility(View.VISIBLE);
