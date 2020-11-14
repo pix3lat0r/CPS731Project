@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">CPS731Project</string>
+    <string name="ezFood">EZ Food</string>
+    <string name="createAccount">Create An Account</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="dontHaveAccount">Don\'t have an account? Create one here</string>
     <string name="addIngredient">Add Ingredient</string>
     <string name="btnAdd">ADD</string>
     <string name="whatToEat">What do you want to eat?</string>
