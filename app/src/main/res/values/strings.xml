@@ -3,6 +3,12 @@
     <string name="txtIngredient">Add Ingredient</string>
     <string name="btnAdd">ADD</string>
     <string name="txtResult"></string>
-    <string name="whatToEatTitle">What do you want to eat?</string>
+    <string name="whatToEat">What do you want to eat?</string>
     <string name="btnGo">GO</string>
+    <string-array name="meals">
+        <item>Snack</item>
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+    </string-array>
 </resources>

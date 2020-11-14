@@ -7,15 +7,47 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/whatToEatTitle"
+        android:id="@+id/whatToEat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="395dp"
         android:layout_marginTop="168dp"
-        android:text="@string/whatToEatTitle"
+        android:text="@string/whatToEat"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/mealType"
+        android:layout_width="226dp"
+        android:layout_height="52dp"
+        android:layout_marginBottom="332dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="37dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="16dp"
+        android:entries="@array/meals"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnGo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/whatToEat" />
+
+    <Button
+        android:id="@+id/btnGo"
+        android:layout_width="91dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="331dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="36dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/btnGo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mealType"
+        app:layout_constraintTop_toBottomOf="@+id/whatToEat" />
 </androidx.constraintlayout.widget.ConstraintLayout>
