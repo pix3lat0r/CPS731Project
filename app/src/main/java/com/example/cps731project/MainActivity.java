@@ -66,29 +66,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
-    /*public void addIngredient(View v){
-        String ingred = enteredIngredient.getSelectedItem().toString();
-
-        Map<String, Object> ingredients = new HashMap<>();
-        ingredients.put(KEY_TITLE, ingred);
-
-        db.collection("ingredients")
-                .add(ingredients)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                       // Toast.makeText(MainActivity.this, "Ingredient Added", Toast.LENGTH_LONG).show();
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error", e);
-                    }
-                });
-    }*/
-
 }
