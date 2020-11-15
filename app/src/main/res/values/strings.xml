@@ -4,6 +4,7 @@
     <string name="createAccount">Create An Account</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
+    <string name="loginHere">Please Login</string>
     <string name="login">LOGIN</string>
     <string name="dontHaveAccount">Don\'t have an account? Create one here</string>
     <string name="addIngredient">Add Ingredient</string>

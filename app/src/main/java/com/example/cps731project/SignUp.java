@@ -55,19 +55,25 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 name = findViewById(R.id.name);
                 email = findViewById(R.id.email);
-                password =findViewById(R.id.password);
+                password = findViewById(R.id.password);
 
                 final String reg_name = name.getText().toString();
                 final String reg_email = email.getText().toString();
                 final String reg_password = password.getText().toString();
 
-                if(reg_name.equals("")){
+                if(reg_name.isEmpty() || reg_email.isEmpty() || reg_password.isEmpty()) {
+                    Toast.makeText(SignUp.this, "Text fields cannot be empty", Toast.LENGTH_SHORT).show();
+                }
+                else if(reg_name.equals("")){
                     Toast.makeText(SignUp.this, "Please enter your name", Toast.LENGTH_SHORT).show();
-                }else if(reg_email.equals("")){
+                }
+                else if(reg_email.equals("")){
                     Toast.makeText(SignUp.this, "Please enter an email address", Toast.LENGTH_SHORT).show();
-                }else if(reg_password.equals("")){
+                }
+                else if(reg_password.equals("")){
                     Toast.makeText(SignUp.this, "Please enter a password", Toast.LENGTH_SHORT).show();
-                }else {
+                }
+                else {
 
                     //This part is supposed to check if account already exists but it's not working not sure why
                     ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
