@@ -1,0 +1,275 @@
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".Login\">\n\n    <TextView\n        android:id=\"@+id/ezFood\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"@string/ezFood\"\n        android:textSize=\"36sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.498\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        app:layout_constraintVertical_bias=\"0.126\" />\n\n    <TextView\n        android:id=\"@+id/createAccount\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"16dp\"\n        android:text=\"@string/createAccount\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.498\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/ezFood\" />\n\n    <EditText\n        android:id=\"@+id/loginEmail\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"48dp\"\n        android:ems=\"10\"\n        android:hint=\"@string/email\"\n        android:inputType=\"textEmailAddress\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/createAccount\"\n        android:autofillHints=\"\"/>\n\n    <EditText\n        android:id=\"@+id/loginPassword\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"20dp\"\n        android:ems=\"10\"\n        android:hint=\"@string/password\"\n        android:inputType=\"textPassword\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/loginEmail\"\n        android:autofillHints=\"\" />\n\n    <Button\n        android:id=\"@+id/btnLogin\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"50dp\"\n        android:text=\"@string/login\"\n        android:textSize=\"24sp\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/loginPassword\" />\n\n    <TextView\n        android:id=\"@+id/textView\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"24dp\"\n        android:text=\"@string/dontHaveAccount\"\n        android:textSize=\"16sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.492\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/btnLogin\"\n        app:layout_constraintVertical_bias=\"0.0\" />\n\n    <ProgressBar\n        android:id=\"@+id/progressBar\"\n        style=\"?android:attr/progressBarStyle\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:visibility=\"invisible\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.498\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/textView\"\n        app:layout_constraintVertical_bias=\"0.237\" />\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_login.xml	(revision cf8e9292a330a6aadbd1b7f99221910dce4b7e57)
++++ app/src/main/res/layout/activity_login.xml	(date 1605397625923)
+@@ -20,11 +20,11 @@
+         app:layout_constraintVertical_bias="0.126" />
+ 
+     <TextView
+-        android:id="@+id/createAccount"
++        android:id="@+id/loginHere"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="16dp"
+-        android:text="@string/createAccount"
++        android:text="@string/loginHere"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.498"
+         app:layout_constraintStart_toStartOf="parent"
+@@ -40,7 +40,7 @@
+         android:inputType="textEmailAddress"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/createAccount"
++        app:layout_constraintTop_toBottomOf="@+id/loginHere"
+         android:autofillHints=""/>
+ 
+     <EditText
+@@ -68,7 +68,7 @@
+         app:layout_constraintTop_toBottomOf="@+id/loginPassword" />
+ 
+     <TextView
+-        android:id="@+id/textView"
++        android:id="@+id/dontHaveAccount"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="24dp"
+@@ -91,7 +91,7 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintHorizontal_bias="0.498"
+         app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/textView"
++        app:layout_constraintTop_toBottomOf="@+id/dontHaveAccount"
+         app:layout_constraintVertical_bias="0.237" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\n    <string name=\"app_name\">CPS731Project</string>\n    <string name=\"ezFood\">EZ Food</string>\n    <string name=\"createAccount\">Create An Account</string>\n    <string name=\"email\">Email</string>\n    <string name=\"password\">Password</string>\n    <string name=\"login\">LOGIN</string>\n    <string name=\"dontHaveAccount\">Don\\'t have an account? Create one here</string>\n    <string name=\"addIngredient\">Add Ingredient</string>\n    <string name=\"btnAdd\">ADD</string>\n    <string name=\"whatToEat\">What do you want to eat?</string>\n    <string name=\"ingredientsYouHave\">Ingredients You Have</string>\n    <string name=\"btnGo\">GO</string>\n    <string-array name=\"meals\">\n        <item>Snack</item>\n        <item>Breakfast</item>\n        <item>Lunch</item>\n        <item>Dinner</item>\n    </string-array>\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision cf8e9292a330a6aadbd1b7f99221910dce4b7e57)
++++ app/src/main/res/values/strings.xml	(date 1605397625943)
+@@ -4,6 +4,7 @@
+     <string name="createAccount">Create An Account</string>
+     <string name="email">Email</string>
+     <string name="password">Password</string>
++    <string name="loginHere">Please Login</string>
+     <string name="login">LOGIN</string>
+     <string name="dontHaveAccount">Don\'t have an account? Create one here</string>
+     <string name="addIngredient">Add Ingredient</string>
+Index: app/src/main/java/com/example/cps731project/SignUp.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cps731project;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.EditText;\nimport android.widget.ProgressBar;\nimport android.widget.TextView;\nimport android.widget.Toast;\n\nimport com.google.android.gms.tasks.OnCompleteListener;\nimport com.google.android.gms.tasks.OnFailureListener;\nimport com.google.android.gms.tasks.OnSuccessListener;\nimport com.google.android.gms.tasks.Task;\nimport com.google.firebase.firestore.CollectionReference;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.DocumentSnapshot;\nimport com.google.firebase.firestore.FirebaseFirestore;\nimport com.google.firebase.firestore.Query;\nimport com.google.firebase.firestore.QuerySnapshot;\n\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class SignUp extends AppCompatActivity {\n    public static final String EMAIL_KEY = \"email\";\n    public static final String NAME_KEY = \"name\";\n    public static final String PASSWORD_KEY = \"password\";\n\n    private Button register;\n    private EditText name;\n    private EditText email;\n    private EditText password;\n    private ProgressBar progress2;\n\n    FirebaseFirestore db = FirebaseFirestore.getInstance();\n    DocumentReference ref;// = db.collection(\"users\").document();\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_sign_up);\n\n        ref = db.collection(\"users\").document();\n\n        progress2 = findViewById(R.id.progressBar2);\n        register = findViewById(R.id.btnRegister);\n        register.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                name = findViewById(R.id.name);\n                email = findViewById(R.id.email);\n                password =findViewById(R.id.password);\n\n                final String reg_name = name.getText().toString();\n                final String reg_email = email.getText().toString();\n                final String reg_password = password.getText().toString();\n\n                if(reg_name.equals(\"\")){\n                    Toast.makeText(SignUp.this, \"Please enter your name\", Toast.LENGTH_SHORT).show();\n                }else if(reg_email.equals(\"\")){\n                    Toast.makeText(SignUp.this, \"Please enter an email address\", Toast.LENGTH_SHORT).show();\n                }else if(reg_password.equals(\"\")){\n                    Toast.makeText(SignUp.this, \"Please enter a password\", Toast.LENGTH_SHORT).show();\n                }else {\n\n                    //This part is supposed to check if account already exists but it's not working not sure why\n                    ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {\n                        @Override\n\n                        public void onSuccess(DocumentSnapshot documentSnapshot) {\n                            progress2.setVisibility(View.VISIBLE);\n                            if (documentSnapshot.exists()){\n                                Toast.makeText(SignUp.this, \"Sorry,this user already exists\", Toast.LENGTH_SHORT).show();\n                            }else{\n                                Map<String, Object> users = new HashMap<>();\n                                users.put(NAME_KEY, reg_name);\n                                users.put(EMAIL_KEY, reg_email);\n                                users.put(PASSWORD_KEY, reg_password);\n\n                                db.collection(\"users\")\n                                        .add(users)\n                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {\n                                            @Override\n                                            public void onSuccess(DocumentReference documentReference) {\n                                                Toast.makeText(SignUp.this, \"Account successfully created\", Toast.LENGTH_SHORT).show();\n                                                startActivity(new Intent(SignUp.this, MainActivity.class));\n                                            }\n                                        })\n                                        .addOnFailureListener(new OnFailureListener() {\n                                            @Override\n                                            public void onFailure(@NonNull Exception e) {\n                                                Toast.makeText(SignUp.this, \"Error creating account\", Toast.LENGTH_LONG).show();\n                                                Log.d(\"Error\", e.getMessage());\n                                            }\n                                        });\n                            }\n                        }\n                    });\n\n                }\n            }\n        });\n        TextView hasAccount = findViewById(R.id.haveAccount);\n        hasAccount.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                startActivity(new Intent(SignUp.this, Login.class));\n            }\n        });\n\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/SignUp.java	(revision cf8e9292a330a6aadbd1b7f99221910dce4b7e57)
++++ app/src/main/java/com/example/cps731project/SignUp.java	(date 1605397786246)
+@@ -55,19 +55,25 @@
+             public void onClick(View v) {
+                 name = findViewById(R.id.name);
+                 email = findViewById(R.id.email);
+-                password =findViewById(R.id.password);
++                password = findViewById(R.id.password);
+ 
+                 final String reg_name = name.getText().toString();
+                 final String reg_email = email.getText().toString();
+                 final String reg_password = password.getText().toString();
+ 
+-                if(reg_name.equals("")){
++                if(reg_name.isEmpty() || reg_email.isEmpty() || reg_password.isEmpty()) {
++                    Toast.makeText(SignUp.this, "Text fields cannot be empty", Toast.LENGTH_SHORT).show();
++                }
++                else if(reg_name.equals("")){
+                     Toast.makeText(SignUp.this, "Please enter your name", Toast.LENGTH_SHORT).show();
+-                }else if(reg_email.equals("")){
++                }
++                else if(reg_email.equals("")){
+                     Toast.makeText(SignUp.this, "Please enter an email address", Toast.LENGTH_SHORT).show();
+-                }else if(reg_password.equals("")){
++                }
++                else if(reg_password.equals("")){
+                     Toast.makeText(SignUp.this, "Please enter a password", Toast.LENGTH_SHORT).show();
+-                }else {
++                }
++                else {
+ 
+                     //This part is supposed to check if account already exists but it's not working not sure why
+                     ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+Index: app/src/main/java/com/example/cps731project/Login.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cps731project;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.EditText;\nimport android.widget.ProgressBar;\nimport android.widget.Toast;\n\nimport com.google.android.gms.tasks.OnCompleteListener;\nimport com.google.android.gms.tasks.Task;\nimport com.google.firebase.firestore.FirebaseFirestore;\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\nimport com.google.firebase.firestore.QuerySnapshot;\n\npublic class Login extends AppCompatActivity {\n\n    private EditText email;\n    private EditText password;\n    private ProgressBar progress;\n\n    FirebaseFirestore db = FirebaseFirestore.getInstance();\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_login);\n\n        email = findViewById(R.id.loginEmail);\n        password = findViewById(R.id.loginPassword);\n        Button login = findViewById(R.id.btnLogin);\n        progress = findViewById(R.id.progressBar);\n\n        login.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                final String logEmail = email.getText().toString();\n                final String logPass = password.getText().toString();\n\n                if (logEmail != null && !logEmail.isEmpty()) {\n                    Toast.makeText(Login.this, \"Please enter valid email\", Toast.LENGTH_SHORT).show();\n                } else if (logPass != null && !logPass.isEmpty()) {\n                    Toast.makeText(Login.this, \"Please enter valid password\", Toast.LENGTH_SHORT).show();\n                }\n                progress.setVisibility(View.VISIBLE);\n                db.collection(\"users\")\n                        .get()\n                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\n                            @Override\n                            public void onComplete(@NonNull Task<QuerySnapshot> task) {\n                                if (task.isSuccessful()) {\n                                    for (QueryDocumentSnapshot doc : task.getResult()) {\n                                        String a1 = logEmail.trim();\n                                        String b1 = logPass.trim();\n                                        if (email.getText().toString().equalsIgnoreCase(a1) & logPass.equalsIgnoreCase(b1)) {\n                                            startActivity(new Intent(Login.this, MainActivity.class));\n                                            Toast.makeText(Login.this, \"Logged In\", Toast.LENGTH_SHORT).show();\n                                        } else {\n                                            Toast.makeText(Login.this, \"Cannot login,incorrect Email and Password\", Toast.LENGTH_SHORT).show();\n                                        }\n                                    }\n                                }\n                            }\n                        });\n            }\n        });\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/Login.java	(revision cf8e9292a330a6aadbd1b7f99221910dce4b7e57)
++++ app/src/main/java/com/example/cps731project/Login.java	(date 1605397297284)
+@@ -1,6 +1,5 @@
+ package com.example.cps731project;
+ 
+-import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
+ 
+ import android.content.Intent;
+@@ -8,64 +7,48 @@
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.EditText;
+-import android.widget.ProgressBar;
++//import android.widget.ProgressBar;
++import android.widget.TextView;
+ import android.widget.Toast;
+ 
+-import com.google.android.gms.tasks.OnCompleteListener;
+-import com.google.android.gms.tasks.Task;
+-import com.google.firebase.firestore.FirebaseFirestore;
+-import com.google.firebase.firestore.QueryDocumentSnapshot;
+-import com.google.firebase.firestore.QuerySnapshot;
++import com.google.firebase.auth.FirebaseAuth;
++
+ 
+ public class Login extends AppCompatActivity {
+ 
+-    private EditText email;
+-    private EditText password;
+-    private ProgressBar progress;
++    private EditText logEmail;
++    private EditText logPassword;
+ 
+-    FirebaseFirestore db = FirebaseFirestore.getInstance();
++    private final FirebaseAuth db = FirebaseAuth.getInstance();
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_login);
+ 
+-        email = findViewById(R.id.loginEmail);
+-        password = findViewById(R.id.loginPassword);
++        logEmail = findViewById(R.id.loginEmail);
++        logPassword = findViewById(R.id.loginPassword);
+         Button login = findViewById(R.id.btnLogin);
+-        progress = findViewById(R.id.progressBar);
++        //ProgressBar progress = findViewById(R.id.progressBar);
+ 
+         login.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+-                final String logEmail = email.getText().toString();
+-                final String logPass = password.getText().toString();
++                final String userEmail = logEmail.getText().toString().trim();
++                final String userPassword = logPassword.getText().toString();
+ 
+-                if (logEmail != null && !logEmail.isEmpty()) {
+-                    Toast.makeText(Login.this, "Please enter valid email", Toast.LENGTH_SHORT).show();
+-                } else if (logPass != null && !logPass.isEmpty()) {
+-                    Toast.makeText(Login.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
++                if(userEmail.isEmpty() || userPassword.isEmpty()) {
++                    Toast.makeText(Login.this, "Text fields cannot be empty", Toast.LENGTH_SHORT).show();
+                 }
+-                progress.setVisibility(View.VISIBLE);
+-                db.collection("users")
+-                        .get()
+-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+-                            @Override
+-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+-                                if (task.isSuccessful()) {
+-                                    for (QueryDocumentSnapshot doc : task.getResult()) {
+-                                        String a1 = logEmail.trim();
+-                                        String b1 = logPass.trim();
+-                                        if (email.getText().toString().equalsIgnoreCase(a1) & logPass.equalsIgnoreCase(b1)) {
+-                                            startActivity(new Intent(Login.this, MainActivity.class));
+-                                            Toast.makeText(Login.this, "Logged In", Toast.LENGTH_SHORT).show();
+-                                        } else {
+-                                            Toast.makeText(Login.this, "Cannot login,incorrect Email and Password", Toast.LENGTH_SHORT).show();
+-                                        }
+-                                    }
+-                                }
+-                            }
+-                        });
++
++
++            }
++        });
++        TextView doesntHaveAccount = findViewById(R.id.dontHaveAccount);
++        doesntHaveAccount.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                startActivity(new Intent(Login.this, SignUp.class));
+             }
+         });
+     }
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\nbuildscript {\n    repositories {\n        google()\n        jcenter()\n    }\n    dependencies {\n        classpath 'com.android.tools.build:gradle:4.1.0'\n        classpath 'com.google.gms:google-services:4.3.4'\n        // NOTE: Do not place your application dependencies here; they belong\n        // in the individual module build.gradle files\n    }\n}\n\nallprojects {\n    repositories {\n        google()\n        jcenter()\n    }\n}\n\ntask clean(type: Delete) {\n    delete rootProject.buildDir\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision cf8e9292a330a6aadbd1b7f99221910dce4b7e57)
++++ build.gradle	(date 1605398429839)
+@@ -5,7 +5,7 @@
+         jcenter()
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:4.1.0'
++        classpath 'com.android.tools.build:gradle:4.1.1'
+         classpath 'com.google.gms:google-services:4.3.4'
+         // NOTE: Do not place your application dependencies here; they belong
+         // in the individual module build.gradle files
+Index: app/src/main/res/layout/activity_sign_up.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".SignUp\">\n\n    <TextView\n        android:id=\"@+id/textView2\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:text=\"EZ Food\"\n        android:textSize=\"36sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.498\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        app:layout_constraintVertical_bias=\"0.133\" />\n\n    <TextView\n        android:id=\"@+id/textView3\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"16dp\"\n        android:text=\"Create An Account\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/textView2\" />\n\n    <EditText\n        android:id=\"@+id/name\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"36dp\"\n        android:ems=\"10\"\n        android:hint=\"Full Name\"\n        android:inputType=\"textPersonName\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/textView3\" />\n\n    <EditText\n        android:id=\"@+id/email\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"12dp\"\n        android:ems=\"10\"\n        android:hint=\"Email\"\n        android:inputType=\"textPersonName\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/name\" />\n\n    <EditText\n        android:id=\"@+id/password\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"12dp\"\n        android:ems=\"10\"\n        android:hint=\"Password\"\n        android:inputType=\"textPassword\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/email\" />\n\n    <Button\n        android:id=\"@+id/btnRegister\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"28dp\"\n        android:text=\"REGISTER\"\n        android:textSize=\"24sp\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.496\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/password\" />\n\n    <TextView\n        android:id=\"@+id/haveAccount\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"28dp\"\n        android:text=\"Have an Account? Login here.\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/btnRegister\" />\n\n    <ProgressBar\n        android:id=\"@+id/progressBar2\"\n        style=\"?android:attr/progressBarStyle\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"28dp\"\n        android:visibility=\"invisible\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.498\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/haveAccount\" />\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_sign_up.xml	(revision cf8e9292a330a6aadbd1b7f99221910dce4b7e57)
++++ app/src/main/res/layout/activity_sign_up.xml	(date 1605397297295)
+@@ -10,7 +10,7 @@
+         android:id="@+id/textView2"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:text="EZ Food"
++        android:text="@string/ezFood"
+         android:textSize="36sp"
+         app:layout_constraintBottom_toBottomOf="parent"
+         app:layout_constraintEnd_toEndOf="parent"
+@@ -24,7 +24,7 @@
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="16dp"
+-        android:text="Create An Account"
++        android:text="@string/createAccount"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/textView2" />
+@@ -48,7 +48,7 @@
+         android:layout_marginTop="12dp"
+         android:ems="10"
+         android:hint="Email"
+-        android:inputType="textPersonName"
++        android:inputType="textEmailAddress"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toBottomOf="@+id/name" />
+@@ -59,7 +59,7 @@
+         android:layout_height="wrap_content"
+         android:layout_marginTop="12dp"
+         android:ems="10"
+-        android:hint="Password"
++        android:hint="@string/password"
+         android:inputType="textPassword"
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
