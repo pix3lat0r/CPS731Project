@@ -1,73 +1,184 @@
 package com.example.cps731project;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.google.firebase.auth.FirebaseAuth;
+import android.widget.Toast;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener {
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+//import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class SignUp extends AppCompatActivity {
+    private static final String TAG = "TAG";
+    //public static final String EMAIL_KEY = "email";
+    //public static final String NAME_KEY = "name";
+    //public static final String PASSWORD_KEY = "password";
     private EditText mName, mEmail, mPassword;
-    private Button register;
+    //private FirebaseAuth fAuth;
+    private FirebaseFirestore db;
+    private ProgressBar progress2;
+    DocumentReference doc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        FirebaseAuth fAuth = FirebaseAuth.getInstance();
-
         TextView login = findViewById(R.id.haveAccount);
-        login.setOnClickListener(this);
-
-        register = findViewById(R.id.btnRegister);
-        register.setOnClickListener(this);
-
+        Button register = findViewById(R.id.btnRegister);
         mName = findViewById(R.id.name);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
-        ProgressBar progress2 = findViewById(R.id.progressBar2);
-    }
+        progress2 = findViewById(R.id.progressBar2);
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.haveAccount) {
-            startActivity(new Intent(this, Login.class));
-        } else if (v.getId() == R.id.btnRegister) {
-            registerUser();
-        }
-    }
+        db = FirebaseFirestore.getInstance();
+        doc = db.collection("users").document();
 
-    private void registerUser() {
-        String name = mName.getText().toString().trim();
-        String email = mEmail.getText().toString().trim();
-        String password = mPassword.getText().toString().trim();
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String name = mName.getText().toString();
+                final String email = mEmail.getText().toString();
+                final String password = mPassword.getText().toString();
 
-        if(name.isEmpty()) {
-            mName.setError("Full name is required!");
-            mName.requestFocus();
-            return;
-        }
-        if(email.isEmpty()) {
-            mEmail.setError("Email is required!");
-            mEmail.requestFocus();
-            return;
-        }
-        if(password.isEmpty()) {
-            mPassword.setError("Password is required!");
-            mPassword.requestFocus();
-            return;
-        }
-        if(password.length() < 6) {
-            mPassword.setError("Password should be at least 6 characters!");
-        }
+                if (name.isEmpty()) {
+                    mName.setError("Full name is required!");
+                    mName.requestFocus();
+                } else if (email.isEmpty()) {
+                    mEmail.setError("Email is required!");
+                    mEmail.requestFocus();
+                } else if (password.isEmpty()) {
+                    mPassword.setError("Password is required!");
+                    mPassword.requestFocus();
+                } else if (password.length() < 6) {
+                    mPassword.setError("Password should be at least 6 characters!");
+                    mPassword.requestFocus();
+                } else {
+                    CollectionReference usersRef = db.collection("users");
+                    Query query = usersRef.whereEqualTo("email", email);
+                    query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            progress2.setVisibility(View.VISIBLE);
+                            if (task.isSuccessful()) {
+                                for(DocumentSnapshot documentSnapshot : task.getResult()) {
+                                    String eMail = documentSnapshot.getString("email");
 
+                                    if (eMail.equals(email)) {
+                                        Log.d(TAG, "User Exists");
+                                        Toast.makeText(SignUp.this, "Email exists", Toast.LENGTH_SHORT).show();
+                                        progress2.setVisibility(View.GONE);
+                                    }
+                                }
+                            }
+                            if(task.getResult().size() == 0 ){
+                                Map<String, Object> reg_entry = new HashMap<>();
+                                reg_entry.put("email", email);
+                                reg_entry.put("name", name);
+                                reg_entry.put("password", password);
+
+                                //   String myId = ref.getId();
+                                db.collection("users")
+                                        .add(reg_entry)
+                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                progress2.setVisibility(View.VISIBLE);
+                                                Toast.makeText(SignUp.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(SignUp.this, Login.class));
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("Error", e.getMessage());
+                                            }
+                                        });
+                                progress2.setVisibility(View.GONE);
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SignUp.this, Login.class));
+            }
+        });
     }
 }
+        /*fAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            DocumentReference docRef = db.collection("users").document();
+                            // Add document data using a hashmap
+                            Map<String, Object> user = new HashMap<>();
+                            user.put(NAME_KEY, name);
+                            user.put(EMAIL_KEY, email);
+                            user.put(PASSWORD_KEY, password);
+                            //asynchronously write data
+                            docRef.set(user);
+                            Toast.makeText(SignUp.this, "Account successfully created", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(SignUp.this, MainActivity.class));
+                        }
+                        else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(SignUp.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        progress2.setVisibility(View.GONE);
+                    }
+                });
+        /*progress2.setVisibility(View.VISIBLE);
+        fAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            User user = new User(name, email);
+                            Log.d(TAG, "signInWithEmail:success");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(SignUp.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(SignUp.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        progress2.setVisibility(View.GONE);
+                    }
+                });*/
+
+
     /*public static final String EMAIL_KEY = "email";
     public static final String NAME_KEY = "name";
     public static final String PASSWORD_KEY = "password";
