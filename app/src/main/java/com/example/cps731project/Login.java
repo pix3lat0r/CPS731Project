@@ -45,7 +45,7 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Please enter valid email", Toast.LENGTH_SHORT).show();
                 } else if (logPass != null && !logPass.isEmpty()) {
                     Toast.makeText(Login.this, "Please enter valid password", Toast.LENGTH_SHORT).show();
-                }
+                }else{
                 progress.setVisibility(View.VISIBLE);
                 db.collection("users")
                         .get()
@@ -66,6 +66,7 @@ public class Login extends AppCompatActivity {
                                 }
                             }
                         });
+            }
             }
         });
     }
