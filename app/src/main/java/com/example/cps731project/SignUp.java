@@ -105,7 +105,7 @@ public class SignUp extends AppCompatActivity {
                                             public void onSuccess(DocumentReference documentReference) {
                                                 progress2.setVisibility(View.VISIBLE);
                                                 Toast.makeText(SignUp.this, "Successfully added", Toast.LENGTH_SHORT).show();
-                                                startActivity(new Intent(SignUp.this, Login.class));
+                                                startActivity(new Intent(SignUp.this, MainActivity.class));
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {

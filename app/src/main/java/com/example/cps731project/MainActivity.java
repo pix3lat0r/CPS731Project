@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private Spinner mealType;
     private Button goBtn;
 
+    //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,26 +46,24 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String chosenMeal = mealType.getSelectedItem().toString();
 
-                    Map<String, Object> meal = new HashMap<>();
-                    meal.put(KEY_TITLE, chosenMeal);
-
-                    db.collection("ingredients")
-                            .add(meal)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    //Toast.makeText(MainActivity.this, "Ingredient Added", Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(MainActivity.this, IngredientList.class));
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error adding meal type", e);
-                                }
-                            });
-
+                Map<String, Object> meal = new HashMap<>();
+                meal.put(KEY_TITLE, chosenMeal);
+                db.collection("ingredients")
+                        .add(meal)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                //Toast.makeText(MainActivity.this, "Ingredient Added", Toast.LENGTH_LONG).show();
+                                startActivity(new Intent(MainActivity.this, IngredientList.class));
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding meal type", e);
+                            }
+                        });
             }
         });
     }
