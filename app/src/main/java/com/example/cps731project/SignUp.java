@@ -1,33 +1,154 @@
 package com.example.cps731project;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
+public class SignUp extends AppCompatActivity implements View.OnClickListener {
+    private EditText mName, mEmail, mPassword;
+    private Button register;
 
-import java.util.HashMap;
-import java.util.Map;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
 
-public class SignUp extends AppCompatActivity {
+        FirebaseAuth fAuth = FirebaseAuth.getInstance();
+
+        TextView login = findViewById(R.id.haveAccount);
+        login.setOnClickListener(this);
+
+        register = findViewById(R.id.btnRegister);
+        register.setOnClickListener(this);
+
+        mName = findViewById(R.id.name);
+        mEmail = findViewById(R.id.email);
+        mPassword = findViewById(R.id.password);
+        ProgressBar progress2 = findViewById(R.id.progressBar2);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.haveAccount) {
+            startActivity(new Intent(this, Login.class));
+        } else if (v.getId() == R.id.btnRegister) {
+            registerUser();
+        }
+    }
+
+    private void registerUser() {
+        String name = mName.getText().toString().trim();
+        String email = mEmail.getText().toString().trim();
+        String password = mPassword.getText().toString().trim();
+
+        if(name.isEmpty()) {
+            mName.setError("Full name is required!");
+            mName.requestFocus();
+            return;
+        }
+        if(email.isEmpty()) {
+            mEmail.setError("Email is required!");
+            mEmail.requestFocus();
+            return;
+        }
+        if(password.isEmpty()) {
+            mPassword.setError("Password is required!");
+            mPassword.requestFocus();
+            return;
+        }
+        if(password.length() < 6) {
+            mPassword.setError("Password should be at least 6 characters!");
+        }
+
+    }
+}
+    /*public static final String EMAIL_KEY = "email";
+    public static final String NAME_KEY = "name";
+    public static final String PASSWORD_KEY = "password";
+    public static final String TAG = "TAG";
+    private EditText name, email, password;
+    private Button register;
+    private FirebaseAuth fAuth;
+    private ProgressBar progress2;
+    FirebaseFirestore db;
+    String userID;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
+
+        name = findViewById(R.id.name);
+        email = findViewById(R.id.email);
+        password = findViewById(R.id.password);
+        register = findViewById(R.id.btnRegister);
+
+        fAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        progress2 = findViewById(R.id.progressBar2);
+
+        if (fAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String regName = name.getText().toString();
+                final String regEmail = email.getText().toString().trim();
+                final String regPassword = password.getText().toString().trim();
+
+
+                if (regEmail.equals("")) {
+                    email.setError("Email is required");
+                }
+                if (regPassword.equals("")) {
+                    email.setError("Email is required");
+                }
+                if (password.length() < 6) {
+                    password.setError("Password must be at least 6 Characters");
+                    return;
+                }
+
+                progress2.setVisibility(View.VISIBLE);
+
+                fAuth.createUserWithEmailAndPassword(regName, regEmail)
+                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(SignUp.this, "User Created.", Toast.LENGTH_SHORT).show();
+                                    userID = fAuth.getCurrentUser().getUid();
+                                    DocumentReference doc = db.collection("users").document(userID);
+                                    Map<String, Object> newUser = new HashMap<>();
+                                    newUser.put(NAME_KEY, regName);
+                                    newUser.put(EMAIL_KEY, regEmail);
+                                    newUser.put(PASSWORD_KEY, regPassword);
+                                    doc.set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "onSuccess: user Profile is created for " + userID);
+                                        }
+                                    });
+                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                } else {
+                                    Toast.makeText(SignUp.this, "Error!" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    progress2.setVisibility(View.GONE);
+                                }
+
+                            }
+
+                        });
+            }
+        });
+    }
     public static final String EMAIL_KEY = "email";
     public static final String NAME_KEY = "name";
     public static final String PASSWORD_KEY = "password";
@@ -119,7 +240,4 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(SignUp.this, Login.class));
             }
-        });
-
-    }
-}
+        });*/
