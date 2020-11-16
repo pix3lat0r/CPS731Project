@@ -24,6 +24,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -98,13 +99,17 @@ public class SignUp extends AppCompatActivity {
                                 reg_entry.put("password", password);
 
                                 //   String myId = ref.getId();
-                                db.collection("users")
-                                        .add(reg_entry)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                //set the document id as the email
+                                db.collection("users").document(email)
+                                        .set(reg_entry)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
-                                            public void onSuccess(DocumentReference documentReference) {
+                                            public void onSuccess(Void aVoid) {
                                                 progress2.setVisibility(View.VISIBLE);
                                                 Toast.makeText(SignUp.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                                //saving the email as the userid
+                                                UserID test = new UserID();
+                                                test.setUserID(email);
                                                 startActivity(new Intent(SignUp.this, MainActivity.class));
                                             }
                                         })
@@ -114,6 +119,14 @@ public class SignUp extends AppCompatActivity {
                                                 Log.d("Error", e.getMessage());
                                             }
                                         });
+                                        /*.addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                            @Override
+                                            public void onSuccess(DocumentReference documentReference) {
+                                                progress2.setVisibility(View.VISIBLE);
+                                                Toast.makeText(SignUp.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                                                startActivity(new Intent(SignUp.this, MainActivity.class));
+                                            }
+                                        })*/
                                 progress2.setVisibility(View.GONE);
                             }
                         }
@@ -128,6 +141,13 @@ public class SignUp extends AppCompatActivity {
             }
         });
     }
+   /* String user_id;
+    private void setUserID(String email) {
+        user_id = email;
+    }
+    public String getUserId(){
+        return user_id;
+    }*/
 }
         /*fAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

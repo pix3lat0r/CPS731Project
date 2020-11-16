@@ -78,6 +78,8 @@ public class Login extends AppCompatActivity {
 
                                     if (eMail.equals(email) && passWord.equals(password)) {
                                         Log.d(TAG, "User Exists");
+                                        UserID test = new UserID();
+                                        test.setUserID(email);
                                         startActivity(new Intent(Login.this, MainActivity.class));
                                         Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                     }else {

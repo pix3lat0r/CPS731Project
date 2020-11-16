@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
 
         mealType = findViewById(R.id.mealType);
 
+        final String id = UserID.user_id;
+
         goBtn = findViewById(R.id.btnGo);
         goBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Map<String, Object> meal = new HashMap<>();
                 meal.put(KEY_TITLE, chosenMeal);
-                db.collection("ingredients")
+                db.collection("users").document(id).collection("ingredients")
                         .add(meal)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
