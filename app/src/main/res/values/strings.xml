@@ -17,8 +17,12 @@
     <string name="txtName">Name</string>
     <string name="txtEmail">Email</string>
     <string name="txtRatings">Ratings</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="favourites">Favourites</string>
+    <string name="none">No favourites yet</string>
+    <string name="deleteAll">DELETE ALL FAVOURITES</string>
+    <string name="history">History</string>
+    <string name="none2">No history yet</string>
+    <string name="deleteAll2">DELETE ALL HISTORY</string>
     <string-array name="meals">
         <item>Snack</item>
         <item>Breakfast</item>
