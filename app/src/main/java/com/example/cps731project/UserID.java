@@ -6,6 +6,8 @@ public class UserID {
     public static String user_id;
 
     public void setUserID(String email){
+
         user_id = email;
+
     }
 }
