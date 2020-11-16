@@ -1,5 +1,6 @@
 package com.example.cps731project;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,6 +34,7 @@ public class IngredientList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_list);
 
+        final String id = UserID.user_id;
         ingred = findViewById(R.id.addIngredient);
         addBtn = findViewById(R.id.btnAdd);
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +45,7 @@ public class IngredientList extends AppCompatActivity {
                 Map<String, Object> ingredients = new HashMap<>();
                 ingredients.put(KEY_TITLE, ingredient);
 
-                db.collection("ingredients")
+                db.collection("users").document(id).collection("ingredients")
                         .add(ingredients)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
@@ -61,6 +63,7 @@ public class IngredientList extends AppCompatActivity {
                 ingred.getText().clear();
             }
         });
+
     }
     public void getItem() {
 

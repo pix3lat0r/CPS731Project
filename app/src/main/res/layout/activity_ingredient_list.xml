@@ -65,4 +65,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addIngredient"
         tools:text="@string/txtResult" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

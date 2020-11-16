@@ -12,6 +12,11 @@
     <string name="whatToEat">What do you want to eat?</string>
     <string name="ingredientsYouHave">Ingredients You Have</string>
     <string name="btnGo">GO</string>
+    <string name="btnLogout">LOGOUT</string>
+    <string name="btnDeleteAcc">DELETE ACCOUNT</string>
+    <string name="txtName">Name</string>
+    <string name="txtEmail">Email</string>
+    <string name="txtRatings">Ratings</string>
     <string-array name="meals">
         <item>Snack</item>
         <item>Breakfast</item>
