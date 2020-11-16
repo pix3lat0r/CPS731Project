@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_nav"
+    app:startDestination="@id/viewAccount">
+
+    <activity
+        android:id="@+id/viewAccount"
+        android:name="com.example.cps731project.ViewAccount"
+        android:label="activity_view_account"
+        tools:layout="@layout/activity_view_account" />
+    <fragment
+        android:id="@+id/viewFavourites"
+        android:name="com.example.cps731project.ViewFavourites"
+        android:label="fragment_view_favourites"
+        tools:layout="@layout/fragment_view_favourites" />
+    <fragment
+        android:id="@+id/viewHistory"
+        android:name="com.example.cps731project.viewHistory"
+        android:label="fragment_view_history"
+        tools:layout="@layout/fragment_view_history" />
+</navigation>
