@@ -14,6 +14,8 @@
     <string name="btnGo">GO</string>
     <string name="btnLogout">LOGOUT</string>
     <string name="btnDeleteAcc">DELETE ACCOUNT</string>
+    <string name="myAccount">My Account</string>
+    <string name="account">Account</string>
     <string name="txtName">Name</string>
     <string name="txtEmail">Email</string>
     <string name="txtRatings">Ratings</string>
@@ -23,6 +25,7 @@
     <string name="history">History</string>
     <string name="none2">No history yet</string>
     <string name="deleteAll2">DELETE ALL HISTORY</string>
+    <string name="home">Home</string>
     <string-array name="meals">
         <item>Snack</item>
         <item>Breakfast</item>
