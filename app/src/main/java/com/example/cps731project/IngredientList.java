@@ -91,25 +91,13 @@ public class IngredientList extends AppCompatActivity {
 
 
         //search button
-       /* search = findViewById(R.id.btnsearch);
+        search = findViewById(R.id.btnsearch);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recipe.get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                db.collection("users").document(id).collection("ingredients").get()
-                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                                            }
-                                        });
-                            }
-                        });
+                startActivity(new Intent(IngredientList.this, ShowRecipe.class));
             }
-        });*/
+        });
 
     }
 

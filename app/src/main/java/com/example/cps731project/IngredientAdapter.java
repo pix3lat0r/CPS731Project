@@ -37,7 +37,7 @@ public class IngredientAdapter extends FirestoreRecyclerAdapter<IngredientsModel
         private TextView name;
         public IngridentViewHolder(@NonNull View itemView) {
             super(itemView);
-            name = itemView.findViewById(R.id.ingredient_name);
+            name = itemView.findViewById(R.id.recipe_name);
         }
     }
 }

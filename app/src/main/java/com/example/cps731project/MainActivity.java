@@ -99,6 +99,30 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
+
+        Button account = findViewById(R.id.btnViewAcc);
+        account.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ViewAccount.class));
+            }
+        });
+
+        Button history = findViewById(R.id.btnViewHistory);
+        history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, viewHistory.class));
+            }
+        });
+
+        Button favourites = findViewById(R.id.btnViewFav);
+        favourites.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ViewFavourites.class));
+            }
+        });
     }
 
 }
