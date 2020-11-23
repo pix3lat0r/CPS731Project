@@ -1,17 +1,13 @@
 package com.example.cps731project;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Region;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -42,25 +38,7 @@ public class ViewAccount extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(ViewAccount.this);
-                myAlertBuilder.setTitle("Logout");
-                myAlertBuilder.setMessage("Are you sure you want to log out?");
-                myAlertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ViewAccount.this, "Logged out successfully!", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(ViewAccount.this, Login.class));
-                        //startActivity(new Intent(ViewAccount.this, MainActivity.class));
-                    }
-                });
-
-                myAlertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ViewAccount.this, "You are still logged in!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                myAlertBuilder.show();
+                startActivity(new Intent(ViewAccount.this, Login.class));
             }
         });
 
@@ -79,24 +57,9 @@ public class ViewAccount extends AppCompatActivity {
                         }
                     }
                 });*/
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ViewAccount.this);
-                alertBuilder.setTitle("Delete Account");
-                alertBuilder.setMessage("Are you sure you want to delete your account? \n\nThis action CANNOT be undone");
-                alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doc.delete();
-                        Toast.makeText(ViewAccount.this, "Your account has been deleted", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ViewAccount.this, SignUp.class));
-                    }
-                });
-                alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ViewAccount.this, "Your account has NOT been deleted", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                alertBuilder.show();
+
+                doc.delete();
+                startActivity(new Intent(ViewAccount.this, Login.class));
             }
         });
     }
