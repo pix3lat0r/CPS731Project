@@ -5,15 +5,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeModel, RecipeAdapter.RecipeViewHolder> {
 
     public RecipeAdapter(@NonNull FirestoreRecyclerOptions<RecipeModel> options) {
+
         super(options);
     }
 
@@ -29,11 +30,13 @@ public class RecipeAdapter extends FirestoreRecyclerAdapter<RecipeModel, RecipeA
         return new RecipeViewHolder(view);
     }
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder{
-        private TextView name;
+    static class RecipeViewHolder extends RecyclerView.ViewHolder{
+        TextView name;
+        //ConstraintLayout mainLayout;
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.recipe_name);
+           // mainLayout = findViewById(R.id.recipe_view);
         }
     }
 }

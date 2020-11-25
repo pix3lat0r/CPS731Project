@@ -10,15 +10,15 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class ViewFavourites extends AppCompatActivity {
+public class ViewHistory extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_favourites);
+        setContentView(R.layout.activity_view_history);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
-        bottomNavigationView.setSelectedItemId(R.id.viewFavourites);
+        bottomNavigationView.setSelectedItemId(R.id.viewHistory);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -29,10 +29,10 @@ public class ViewFavourites extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewFavourites:
+                        startActivity(new Intent(getApplicationContext(), ViewFavourites.class));
+                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewHistory:
-                        startActivity(new Intent(getApplicationContext(), ViewHistory.class));
-                        overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewAccount:
                         startActivity(new Intent(getApplicationContext(), ViewAccount.class));
@@ -42,6 +42,5 @@ public class ViewFavourites extends AppCompatActivity {
                 return false;
             }
         });
-
     }
 }

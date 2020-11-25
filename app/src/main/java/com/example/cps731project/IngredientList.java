@@ -1,50 +1,44 @@
 package com.example.cps731project;
 
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class IngredientList extends AppCompatActivity {
     public String ingredient;
 
     private FirebaseFirestore db;
-    private CollectionReference recipe;
     private static final String TAG = "IngredientList";
     private static final String KEY_TITLE = "name";
 
-    private RecyclerView mFirestoreList;
     private IngredientAdapter adapter;
     private EditText ingred;
-    private Button addBtn;
-    private Button search;
-    DocumentReference doc;
+    //private Button search;
+    //DocumentReference doc;
     final String id = UserID.user_id;
 
     @Override
@@ -52,13 +46,39 @@ public class IngredientList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_list);
 
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.mainActivity:
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.viewFavourites:
+                        startActivity(new Intent(getApplicationContext(), ViewFavourites.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.viewHistory:
+                        startActivity(new Intent(getApplicationContext(), ViewHistory.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.viewAccount:
+                        startActivity(new Intent(getApplicationContext(), ViewAccount.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                }
+                return false;
+            }
+        });
 
         db = FirebaseFirestore.getInstance();
-        recipe = db.collection("recipes");
+        CollectionReference recipe = db.collection("recipes");
 
         //Adding ingredients to Firestore
         ingred = findViewById(R.id.addIngredient);
-        addBtn = findViewById(R.id.btnAdd);
+        Button addBtn = findViewById(R.id.btnAdd);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,13 +111,25 @@ public class IngredientList extends AppCompatActivity {
 
 
         //search button
-        search = findViewById(R.id.btnsearch);
+       /* search = findViewById(R.id.btnsearch);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(IngredientList.this, ShowRecipe.class));
+                recipe.get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                db.collection("users").document(id).collection("ingredients").get()
+                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                            }
+                                        });
+                            }
+                        });
             }
-        });
+        });*/
 
     }
 
@@ -112,7 +144,7 @@ public class IngredientList extends AppCompatActivity {
 
         adapter = new IngredientAdapter(options);
 
-        mFirestoreList = findViewById(R.id.recyclerView);
+        RecyclerView mFirestoreList = findViewById(R.id.recyclerView);
         mFirestoreList.setHasFixedSize(true);
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
         mFirestoreList.setAdapter(adapter);
@@ -143,8 +175,8 @@ public class IngredientList extends AppCompatActivity {
         adapter.stopListening();
     }
 
-    public void getItem() {
+    /*public void getItem() {
 
-    }
+    }*/
 
 }

@@ -1,42 +1,24 @@
 package com.example.cps731project;
 
-import androidx.annotation.NonNull;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class ShowRecipe extends AppCompatActivity {
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference recipe = db.collection("recipes");
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final CollectionReference recipe = db.collection("recipes");
     private RecipeAdapter adapter;
     private RecyclerView mFirestoreList;
-    private TextView result;
-    private int count;
+    //private TextView result;
+    //private int count;
     final String id = UserID.user_id;
 
     @Override

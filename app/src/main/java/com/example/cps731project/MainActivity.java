@@ -1,5 +1,6 @@
 package com.example.cps731project;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,41 +34,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView
-                .OnNavigationItemSelectedListener() {
-
+        bottomNavigationView.setSelectedItemId(R.id.mainActivity);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
-            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
-                int id = item.getItemId();
-
-                //noinspection SimplifiableIfStatement
-
-                if (id == R.id.mainActivity) {
-
-                    Intent navHome = new Intent(MainActivity.this, MainActivity.class);
-                    MainActivity.this.startActivity(navHome);
-                    return true;
-                }
-
-                if (id == R.id.viewFavourites) {
-                    Toast.makeText(MainActivity.this, "Favs has been clicked", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-
-                if (id == R.id.viewHistory) {
-                    Toast.makeText(MainActivity.this, "History has been clicked", Toast.LENGTH_LONG).show();
-                    return true;
-                }
-
-                if (id == R.id.viewAccount) {
-                    Intent navLog = new Intent(MainActivity.this, ViewAccount.class);
-                    MainActivity.this.startActivity(navLog);
-                    return true;
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.mainActivity:
+                        return true;
+                    case R.id.viewFavourites:
+                        startActivity(new Intent(getApplicationContext(), ViewFavourites.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.viewHistory:
+                        startActivity(new Intent(getApplicationContext(), ViewHistory.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.viewAccount:
+                        startActivity(new Intent(getApplicationContext(), ViewAccount.class));
+                        overridePendingTransition(0, 0);
+                        return true;
                 }
                 return false;
-
             }
         });
+
         mealType = findViewById(R.id.mealType);
 
         final String id = UserID.user_id;
@@ -97,30 +87,6 @@ public class MainActivity extends AppCompatActivity {
                                 Log.w(TAG, "Error adding meal type", e);
                             }
                         });
-            }
-        });
-
-        Button account = findViewById(R.id.btnViewAcc);
-        account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ViewAccount.class));
-            }
-        });
-
-        Button history = findViewById(R.id.btnViewHistory);
-        history.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, viewHistory.class));
-            }
-        });
-
-        Button favourites = findViewById(R.id.btnViewFav);
-        favourites.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ViewFavourites.class));
             }
         });
     }
