@@ -1,0 +1,794 @@
+Index: app/src/main/java/com/example/cps731project/IngredientList.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cps731project;\n\nimport android.content.DialogInterface;\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.LayoutInflater;\nimport android.view.View;\nimport android.view.ViewGroup;\nimport android.widget.Button;\nimport android.widget.EditText;\nimport android.widget.TextView;\nimport android.widget.Toast;\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AlertDialog;\nimport androidx.appcompat.app.AppCompatActivity;\nimport androidx.recyclerview.widget.ItemTouchHelper;\nimport androidx.recyclerview.widget.LinearLayoutManager;\nimport androidx.recyclerview.widget.RecyclerView;\n\nimport com.firebase.ui.firestore.FirestoreRecyclerAdapter;\nimport com.firebase.ui.firestore.FirestoreRecyclerOptions;\nimport com.google.android.gms.tasks.OnFailureListener;\nimport com.google.android.gms.tasks.OnSuccessListener;\nimport com.google.firebase.firestore.CollectionReference;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.FirebaseFirestore;\nimport com.google.firebase.firestore.Query;\nimport com.google.firebase.firestore.QuerySnapshot;\n\nimport java.util.HashMap;\nimport java.util.Map;\n\npublic class IngredientList extends AppCompatActivity {\n    public String ingredient;\n\n    private FirebaseFirestore db;\n    private CollectionReference recipe;\n    private static final String TAG = \"IngredientList\";\n    private static final String KEY_TITLE = \"name\";\n\n    private RecyclerView mFirestoreList;\n    private IngredientAdapter adapter;\n    private EditText ingred;\n    private Button addBtn;\n    private Button search;\n    DocumentReference doc;\n    final String id = UserID.user_id;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_ingredient_list);\n\n\n        db = FirebaseFirestore.getInstance();\n        recipe = db.collection(\"recipes\");\n\n        //Adding ingredients to Firestore\n        ingred = findViewById(R.id.addIngredient);\n        addBtn = findViewById(R.id.btnAdd);\n        addBtn.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                ingredient = ingred.getText().toString();\n\n                Map<String, Object> ingredients = new HashMap<>();\n                ingredients.put(KEY_TITLE, ingredient);\n\n                db.collection(\"users\").document(id).collection(\"ingredients\")\n                        .add(ingredients)\n                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {\n                            @Override\n                            public void onSuccess(DocumentReference documentReference) {\n                                Toast.makeText(IngredientList.this, \"Ingredient Added\", Toast.LENGTH_LONG).show();\n                                Log.d(TAG, \"DocumentSnapshot added with ID: \" + documentReference.getId());\n                            }\n                        })\n                        .addOnFailureListener(new OnFailureListener() {\n                            @Override\n                            public void onFailure(@NonNull Exception e) {\n                                Log.w(TAG, \"Error adding document\", e);\n                            }\n                        });\n                ingred.getText().clear();\n            }\n        });\n\n        //calling recycler view method\n        setUpRecyclerView();\n\n\n        //search button\n       /* search = findViewById(R.id.btnsearch);\n        search.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                recipe.get()\n                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\n                            @Override\n                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\n                                db.collection(\"users\").document(id).collection(\"ingredients\").get()\n                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {\n                                            @Override\n                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {\n\n                                            }\n                                        });\n                            }\n                        });\n            }\n        });*/\n\n    }\n\n\n    private void setUpRecyclerView(){\n\n        Query query = db.collection(\"users\").document(id).collection(\"ingredients\");\n\n        FirestoreRecyclerOptions<IngredientsModel> options = new FirestoreRecyclerOptions.Builder<IngredientsModel>()\n                .setQuery(query, IngredientsModel.class)\n                .build();\n\n        adapter = new IngredientAdapter(options);\n\n        mFirestoreList = findViewById(R.id.recyclerView);\n        mFirestoreList.setHasFixedSize(true);\n        mFirestoreList.setLayoutManager(new LinearLayoutManager(this));\n        mFirestoreList.setAdapter(adapter);\n\n        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,\n                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {\n            @Override\n            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {\n                return false;\n            }\n\n            @Override\n            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {\n                adapter.deleteItem(viewHolder.getAdapterPosition());\n            }\n        }).attachToRecyclerView(mFirestoreList);\n\n    }\n    @Override\n    protected void onStart() {\n        super.onStart();\n        adapter.startListening();\n    }\n\n    @Override\n    protected void onStop() {\n        super.onStop();\n        adapter.stopListening();\n    }\n\n    public void getItem() {\n\n    }\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/IngredientList.java	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/java/com/example/cps731project/IngredientList.java	(date 1606114596605)
+@@ -2,6 +2,7 @@
+ 
+ import android.content.DialogInterface;
+ import android.content.Intent;
++import android.os.Build;
+ import android.os.Bundle;
+ import android.util.Log;
+ import android.view.LayoutInflater;
+@@ -12,6 +13,7 @@
+ import android.widget.TextView;
+ import android.widget.Toast;
+ import androidx.annotation.NonNull;
++import androidx.annotation.RequiresApi;
+ import androidx.appcompat.app.AlertDialog;
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.recyclerview.widget.ItemTouchHelper;
+@@ -20,16 +22,23 @@
+ 
+ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
++import com.google.android.gms.tasks.OnCompleteListener;
+ import com.google.android.gms.tasks.OnFailureListener;
+ import com.google.android.gms.tasks.OnSuccessListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.firestore.CollectionReference;
+ import com.google.firebase.firestore.DocumentReference;
++import com.google.firebase.firestore.DocumentSnapshot;
+ import com.google.firebase.firestore.FirebaseFirestore;
+ import com.google.firebase.firestore.Query;
++import com.google.firebase.firestore.QueryDocumentSnapshot;
+ import com.google.firebase.firestore.QuerySnapshot;
+ 
+ import java.util.HashMap;
++import java.util.List;
+ import java.util.Map;
++import java.util.Objects;
+ 
+ public class IngredientList extends AppCompatActivity {
+     public String ingredient;
+@@ -46,6 +55,7 @@
+     private Button search;
+     DocumentReference doc;
+     final String id = UserID.user_id;
++    final Map<String, Object> ingredients = new HashMap<>();
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+@@ -64,7 +74,6 @@
+             public void onClick(View v) {
+                 ingredient = ingred.getText().toString();
+ 
+-                Map<String, Object> ingredients = new HashMap<>();
+                 ingredients.put(KEY_TITLE, ingredient);
+ 
+                 db.collection("users").document(id).collection("ingredients")
+@@ -90,6 +99,13 @@
+         setUpRecyclerView();
+ 
+ 
++        search = findViewById(R.id.btnSearch);
++        search.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++            }
++        });
++
+         //search button
+        /* search = findViewById(R.id.btnsearch);
+         search.setOnClickListener(new View.OnClickListener() {
+@@ -143,6 +159,7 @@
+         }).attachToRecyclerView(mFirestoreList);
+ 
+     }
++
+     @Override
+     protected void onStart() {
+         super.onStart();
+@@ -155,8 +172,31 @@
+         adapter.stopListening();
+     }
+ 
+-    public void getItem() {
++    /*private void getItem() {
++        ingred = findViewById(R.id.addIngredient);
++        ingredient = ingred.getText().toString();
++        Map<String, Object> ingredients = new HashMap<>();
++        ingredients.put(KEY_TITLE, ingredient);
++        db = FirebaseFirestore.getInstance();
++        recipe = db.collection("recipes");
++
+ 
+-    }
++
++        /*itemQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
++            @Override
++            public void onComplete(@NonNull Task<QuerySnapshot> task) {
++                if(task.isSuccessful()) {
++                    int count = 0;
++                    for(QueryDocumentSnapshot document : task.getResult()) {
++                        count++;
++                    }
++                    Toast.makeText(IngredientList.this, count + "recipes was found", Toast.LENGTH_SHORT).show();
++                }
++                else {
++                    Toast.makeText(IngredientList.this, "Error: Recipe was not found", Toast.LENGTH_SHORT).show();
++                }
++            }
++        });
++    }*/
+ 
+ }
+Index: app/src/main/res/layout/activity_ingredient_list.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:padding=\"20dp\"\n    tools:context=\".MainActivity\">\n\n    <TextView\n        android:id=\"@+id/ingredientsYouHave\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"395dp\"\n        android:text=\"@string/ingredientsYouHave\"\n        android:textSize=\"30sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.495\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\"\n        app:layout_constraintVertical_bias=\"0.274\" />\n\n    <EditText\n        android:id=\"@+id/addIngredient\"\n        android:layout_width=\"207dp\"\n        android:layout_height=\"44dp\"\n        android:layout_marginEnd=\"12dp\"\n        android:layout_marginLeft=\"45dp\"\n        android:layout_marginRight=\"12dp\"\n        android:layout_marginStart=\"45dp\"\n        android:layout_marginTop=\"20dp\"\n        android:autofillHints=\"\"\n        android:hint=\"@string/addIngredient\"\n        android:inputType=\"text\"\n        app:layout_constraintEnd_toStartOf=\"@+id/btnAdd\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/ingredientsYouHave\" />\n\n    <Button\n        android:id=\"@+id/btnAdd\"\n        android:layout_width=\"62dp\"\n        android:layout_height=\"45dp\"\n        android:layout_marginEnd=\"45dp\"\n        android:layout_marginLeft=\"6dp\"\n        android:layout_marginRight=\"45dp\"\n        android:layout_marginStart=\"6dp\"\n        android:layout_marginTop=\"20dp\"\n        android:text=\"@string/btnAdd\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toEndOf=\"@+id/addIngredient\"\n        app:layout_constraintTop_toBottomOf=\"@+id/ingredientsYouHave\" />\n\n    <androidx.recyclerview.widget.RecyclerView\n        android:id=\"@+id/recyclerView\"\n        android:layout_width=\"293dp\"\n        android:layout_height=\"243dp\"\n        android:layout_marginTop=\"16dp\"\n        app:layout_constraintBottom_toTopOf=\"@+id/btnsearch\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.53\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/addIngredient\"\n        app:layout_constraintVertical_bias=\"0.0\" />\n\n    <Button\n        android:id=\"@+id/btnsearch\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"8dp\"\n        android:text=\"Search\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.498\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/recyclerView\" />\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_ingredient_list.xml	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/res/layout/activity_ingredient_list.xml	(date 1606100558672)
+@@ -64,7 +64,7 @@
+         app:layout_constraintVertical_bias="0.0" />
+ 
+     <Button
+-        android:id="@+id/btnsearch"
++        android:id="@+id/btnSearch"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_marginTop="8dp"
+Index: app/src/main/java/com/example/cps731project/ViewAccount.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cps731project;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.View;\nimport android.widget.Button;\n\nimport com.google.android.gms.tasks.OnCompleteListener;\nimport com.google.android.gms.tasks.Task;\nimport com.google.firebase.firestore.CollectionReference;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.FirebaseFirestore;\nimport com.google.firebase.firestore.Query;\nimport com.google.firebase.firestore.QuerySnapshot;\n\npublic class ViewAccount extends AppCompatActivity {\n\n    FirebaseFirestore db;\n    private Button logout;\n    private Button deleteAcc;\n    DocumentReference doc;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_view_account);\n\n        final String id = UserID.user_id;\n        db = FirebaseFirestore.getInstance();\n        doc = db.collection(\"users\").document(id);\n\n        //LOGOUT BUTTON\n        logout = findViewById(R.id.btnLogout);\n        logout.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                startActivity(new Intent(ViewAccount.this, Login.class));\n            }\n        });\n\n        //DELETE ACCOUNT BUTTON\n        deleteAcc = findViewById(R.id.btnDeleteAcc);\n        deleteAcc.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                /*CollectionReference usersRef = db.collection(\"users\");\n                Query query = usersRef.whereEqualTo(\"email\", id);\n                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\n                    @Override\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\n                        if(task.isSuccessful()){\n                            doc.delete();\n                        }\n                    }\n                });*/\n\n                doc.delete();\n                startActivity(new Intent(ViewAccount.this, Login.class));\n            }\n        });\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/ViewAccount.java	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/java/com/example/cps731project/ViewAccount.java	(date 1606098482899)
+@@ -1,27 +1,21 @@
+ package com.example.cps731project;
+ 
+-import androidx.annotation.NonNull;
+-import androidx.appcompat.app.AppCompatActivity;
+-
+ import android.content.Intent;
+ import android.os.Bundle;
+-import android.util.Log;
++import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.Button;
+ 
+-import com.google.android.gms.tasks.OnCompleteListener;
+-import com.google.android.gms.tasks.Task;
+-import com.google.firebase.firestore.CollectionReference;
++import com.google.android.material.bottomnavigation.BottomNavigationView;
+ import com.google.firebase.firestore.DocumentReference;
+ import com.google.firebase.firestore.FirebaseFirestore;
+-import com.google.firebase.firestore.Query;
+-import com.google.firebase.firestore.QuerySnapshot;
++
++import androidx.annotation.NonNull;
++import androidx.appcompat.app.AppCompatActivity;
+ 
+ public class ViewAccount extends AppCompatActivity {
+ 
+     FirebaseFirestore db;
+-    private Button logout;
+-    private Button deleteAcc;
+     DocumentReference doc;
+ 
+     @Override
+@@ -29,12 +23,43 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_view_account);
+ 
++        /*BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
++        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView
++                .OnNavigationItemSelectedListener() {
++
++            @Override
++            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
++                int id = item.getItemId();
++                if (id == R.id.mainActivity) {
++
++                    Intent viewHome = new Intent(ViewAccount.this, MainActivity.class);
++                    ViewAccount.this.startActivity(viewHome);
++                    return true;
++                }
++                /*if (id == R.id.viewFavourites) {
++                    Toast.makeText(MainActivity.this, "Favs has been clicked", Toast.LENGTH_LONG).show();
++                    return true;
++                }
++                if (id == R.id.viewHistory) {
++                    Toast.makeText(MainActivity.this, "History has been clicked", Toast.LENGTH_LONG).show();
++                    return true;
++                }
++                if (id == R.id.viewAccount) {
++                    Intent viewAcc = new Intent(ViewAccount.this, ViewAccount.class);
++                    ViewAccount.this.startActivity(viewAcc);
++                    return true;
++                }
++                return false;
++
++            }
++        });*/
++
+         final String id = UserID.user_id;
+         db = FirebaseFirestore.getInstance();
+         doc = db.collection("users").document(id);
+ 
+         //LOGOUT BUTTON
+-        logout = findViewById(R.id.btnLogout);
++        Button logout = findViewById(R.id.btnLogout);
+         logout.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+@@ -43,7 +68,7 @@
+         });
+ 
+         //DELETE ACCOUNT BUTTON
+-        deleteAcc = findViewById(R.id.btnDeleteAcc);
++        Button deleteAcc = findViewById(R.id.btnDeleteAcc);
+         deleteAcc.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+Index: app/src/main/res/layout/fragment_first.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_first.xml	(date 1606098482982)
++++ app/src/main/res/layout/fragment_first.xml	(date 1606098482982)
+@@ -0,0 +1,54 @@
++<?xml version="1.0" encoding="utf-8"?>
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context="com.example.cps731project.MainActivity">
++
++    <TextView
++        android:id="@+id/whatToEat"
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:layout_marginBottom="395dp"
++        android:layout_marginTop="168dp"
++        android:text="@string/whatToEat"
++        android:textSize="30sp"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
++
++    <Spinner
++        android:id="@+id/mealType"
++        android:layout_width="226dp"
++        android:layout_height="52dp"
++        android:layout_marginBottom="332dp"
++        android:layout_marginEnd="10dp"
++        android:layout_marginLeft="37dp"
++        android:layout_marginRight="10dp"
++        android:layout_marginStart="37dp"
++        android:layout_marginTop="16dp"
++        android:entries="@array/meals"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toStartOf="@+id/btnGo"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toBottomOf="@+id/whatToEat" />
++
++    <Button
++        android:id="@+id/btnGo"
++        android:layout_width="91dp"
++        android:layout_height="53dp"
++        android:layout_marginBottom="331dp"
++        android:layout_marginEnd="36dp"
++        android:layout_marginLeft="10dp"
++        android:layout_marginRight="36dp"
++        android:layout_marginStart="10dp"
++        android:layout_marginTop="16dp"
++        android:text="@string/btnGo"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toEndOf="@+id/mealType"
++        app:layout_constraintTop_toBottomOf="@+id/whatToEat" />
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_view_favs.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".ViewFavourites\">\n\n    <TextView\n        android:id=\"@+id/favourites\"\n        android:layout_width=\"392dp\"\n        android:layout_height=\"47dp\"\n        android:layout_marginBottom=\"529dp\"\n        android:layout_marginTop=\"32dp\"\n        android:text=\"@string/favourites\"\n        android:textSize=\"30sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <TextView\n        android:id=\"@+id/favDescription\"\n        android:layout_width=\"386dp\"\n        android:layout_height=\"52dp\"\n        android:layout_marginBottom=\"474dp\"\n        android:layout_marginEnd=\"16dp\"\n        android:layout_marginLeft=\"9dp\"\n        android:layout_marginRight=\"16dp\"\n        android:layout_marginStart=\"9dp\"\n        android:layout_marginTop=\"1dp\"\n        android:text=\"@string/none\"\n        android:textSize=\"20sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/favourites\"\n        app:layout_constraintVertical_bias=\"0.0\" />\n\n    <Button\n        android:id=\"@+id/deleteFavs\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"425dp\"\n        android:layout_marginEnd=\"216dp\"\n        android:layout_marginLeft=\"10dp\"\n        android:layout_marginRight=\"216dp\"\n        android:layout_marginStart=\"10dp\"\n        android:text=\"@string/deleteAll\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/favDescription\"\n        app:layout_constraintVertical_bias=\"0.0\" />\n\n    <com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/bottomNav\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"367dp\"\n        android:background=\"#d3d3d3\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintHorizontal_bias=\"0.0\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/deleteFavs\"\n        app:menu=\"@menu/bottom_nav\" />\n</androidx.constraintlayout.widget.ConstraintLayout>\n
+===================================================================
+--- app/src/main/res/layout/activity_view_favs.xml	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/res/layout/fragment_second.xml	(date 1606098483083)
+@@ -4,7 +4,7 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    tools:context=".ViewFavourites">
++    tools:context="com.example.cps731project.MainActivity">
+ 
+     <TextView
+         android:id="@+id/favourites"
+@@ -53,16 +53,5 @@
+         app:layout_constraintTop_toBottomOf="@+id/favDescription"
+         app:layout_constraintVertical_bias="0.0" />
+ 
+-    <com.google.android.material.bottomnavigation.BottomNavigationView
+-        android:id="@+id/bottomNav"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="367dp"
+-        android:background="#d3d3d3"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintHorizontal_bias="0.0"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/deleteFavs"
+-        app:menu="@menu/bottom_nav" />
+-</androidx.constraintlayout.widget.ConstraintLayout>
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/menu/bottom_nav.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<menu xmlns:android=\"http://schemas.android.com/apk/res/android\">\n\n    <item\n        android:id=\"@+id/mainActivity\"\n        android:title=\"@string/home\"\n        android:icon=\"@drawable/ic_home\" />\n\n    <item\n        android:id=\"@+id/viewFavourites\"\n        android:title=\"@string/favourites\"\n        android:icon=\"@drawable/ic_favorite\" />\n    <item\n        android:id=\"@+id/viewHistory\"\n        android:title=\"@string/history\"\n        android:icon=\"@drawable/ic_history\"/>\n    <item\n        android:id=\"@+id/viewAccount\"\n        android:title=\"@string/account\"\n        android:icon=\"@drawable/ic_account\"/>\n</menu>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/menu/bottom_nav.xml	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/res/menu/bottom_nav.xml	(date 1606098482998)
+@@ -2,16 +2,16 @@
+ <menu xmlns:android="http://schemas.android.com/apk/res/android">
+ 
+     <item
+-        android:id="@+id/mainActivity"
++        android:id="@+id/firstFragment"
+         android:title="@string/home"
+         android:icon="@drawable/ic_home" />
+ 
+     <item
+-        android:id="@+id/viewFavourites"
++        android:id="@+id/secondFragment"
+         android:title="@string/favourites"
+         android:icon="@drawable/ic_favorite" />
+     <item
+-        android:id="@+id/viewHistory"
++        android:id="@+id/thirdFragment"
+         android:title="@string/history"
+         android:icon="@drawable/ic_history"/>
+     <item
+Index: app/src/main/java/com/example/cps731project/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cps731project;\n\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.util.Log;\nimport android.view.MenuItem;\nimport android.view.View;\nimport android.widget.Button;\nimport android.widget.Spinner;\nimport android.widget.Toast;\n\nimport com.google.android.gms.tasks.OnFailureListener;\nimport com.google.android.gms.tasks.OnSuccessListener;\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\nimport com.google.firebase.firestore.DocumentReference;\nimport com.google.firebase.firestore.FirebaseFirestore;\n\nimport java.util.HashMap;\nimport java.util.Map;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\n\npublic class MainActivity extends AppCompatActivity {\n\n    FirebaseFirestore db = FirebaseFirestore.getInstance();\n    private static final String TAG = \"MainActivity\";\n    private static final String KEY_TITLE = \"mealType\";\n    private Spinner mealType;\n\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_main);\n\n        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);\n        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView\n                .OnNavigationItemSelectedListener() {\n\n            @Override\n            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {\n                int id = item.getItemId();\n\n                //noinspection SimplifiableIfStatement\n\n                if (id == R.id.mainActivity) {\n\n                    Intent navHome = new Intent(MainActivity.this, MainActivity.class);\n                    MainActivity.this.startActivity(navHome);\n                    return true;\n                }\n\n                if (id == R.id.viewFavourites) {\n                    Toast.makeText(MainActivity.this, \"Favs has been clicked\", Toast.LENGTH_LONG).show();\n                    return true;\n                }\n\n                if (id == R.id.viewHistory) {\n                    Toast.makeText(MainActivity.this, \"History has been clicked\", Toast.LENGTH_LONG).show();\n                    return true;\n                }\n\n                if (id == R.id.viewAccount) {\n                    Intent navLog = new Intent(MainActivity.this, ViewAccount.class);\n                    MainActivity.this.startActivity(navLog);\n                    return true;\n                }\n                return false;\n\n            }\n        });\n        mealType = findViewById(R.id.mealType);\n\n        final String id = UserID.user_id;\n\n        Button goBtn = findViewById(R.id.btnGo);\n        goBtn.setOnClickListener(new View.OnClickListener() {\n            @Override\n            public void onClick(View v) {\n                String chosenMeal = mealType.getSelectedItem().toString();\n\n                Map<String, Object> meal = new HashMap<>();\n                meal.put(KEY_TITLE, chosenMeal);\n                db.collection(\"users\").document(id).collection(\"ingredients\")\n                        .add(meal)\n                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {\n                            @Override\n                            public void onSuccess(DocumentReference documentReference) {\n                                //Toast.makeText(MainActivity.this, \"Ingredient Added\", Toast.LENGTH_LONG).show();\n                                startActivity(new Intent(MainActivity.this, IngredientList.class));\n                                Log.d(TAG, \"DocumentSnapshot added with ID: \" + documentReference.getId());\n                            }\n                        })\n                        .addOnFailureListener(new OnFailureListener() {\n                            @Override\n                            public void onFailure(@NonNull Exception e) {\n                                Log.w(TAG, \"Error adding meal type\", e);\n                            }\n                        });\n            }\n        });\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/MainActivity.java	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/java/com/example/cps731project/MainActivity.java	(date 1606098483038)
+@@ -3,11 +3,9 @@
+ import android.content.Intent;
+ import android.os.Bundle;
+ import android.util.Log;
+-import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.Button;
+ import android.widget.Spinner;
+-import android.widget.Toast;
+ 
+ import com.google.android.gms.tasks.OnFailureListener;
+ import com.google.android.gms.tasks.OnSuccessListener;
+@@ -20,6 +18,9 @@
+ 
+ import androidx.annotation.NonNull;
+ import androidx.appcompat.app.AppCompatActivity;
++import androidx.navigation.NavController;
++import androidx.navigation.Navigation;
++import androidx.navigation.ui.NavigationUI;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
+@@ -33,42 +34,10 @@
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_main);
+ 
+-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+-        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView
+-                .OnNavigationItemSelectedListener() {
+-
+-            @Override
+-            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+-                int id = item.getItemId();
+-
+-                //noinspection SimplifiableIfStatement
+-
+-                if (id == R.id.mainActivity) {
++        /*BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
++        NavController navController = Navigation.findNavController(this,  R.id.fragmentContainer);
++        NavigationUI.setupWithNavController(bottomNavigationView, navController);*/
+ 
+-                    Intent navHome = new Intent(MainActivity.this, MainActivity.class);
+-                    MainActivity.this.startActivity(navHome);
+-                    return true;
+-                }
+-
+-                if (id == R.id.viewFavourites) {
+-                    Toast.makeText(MainActivity.this, "Favs has been clicked", Toast.LENGTH_LONG).show();
+-                    return true;
+-                }
+-
+-                if (id == R.id.viewHistory) {
+-                    Toast.makeText(MainActivity.this, "History has been clicked", Toast.LENGTH_LONG).show();
+-                    return true;
+-                }
+-
+-                if (id == R.id.viewAccount) {
+-                    Intent navLog = new Intent(MainActivity.this, ViewAccount.class);
+-                    MainActivity.this.startActivity(navLog);
+-                    return true;
+-                }
+-                return false;
+-
+-            }
+-        });
+         mealType = findViewById(R.id.mealType);
+ 
+         final String id = UserID.user_id;
+Index: app/src/main/res/layout/activity_view_history.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    tools:context=\".ViewHistory\">\n\n    <TextView\n        android:id=\"@+id/textView4\"\n        android:layout_width=\"392dp\"\n        android:layout_height=\"47dp\"\n        android:layout_marginBottom=\"529dp\"\n        android:layout_marginTop=\"32dp\"\n        android:text=\"@string/history\"\n        android:textSize=\"30sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <TextView\n        android:id=\"@+id/textView\"\n        android:layout_width=\"386dp\"\n        android:layout_height=\"52dp\"\n        android:layout_marginBottom=\"474dp\"\n        android:layout_marginEnd=\"16dp\"\n        android:layout_marginLeft=\"9dp\"\n        android:layout_marginRight=\"16dp\"\n        android:layout_marginStart=\"9dp\"\n        android:layout_marginTop=\"1dp\"\n        android:text=\"@string/none2\"\n        android:textSize=\"20sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/textView4\"\n        app:layout_constraintVertical_bias=\"0.0\" />\n\n    <Button\n        android:id=\"@+id/button\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"425dp\"\n        android:layout_marginEnd=\"239dp\"\n        android:layout_marginLeft=\"10dp\"\n        android:layout_marginRight=\"239dp\"\n        android:layout_marginStart=\"10dp\"\n        android:text=\"@string/deleteAll2\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/textView\"\n        app:layout_constraintVertical_bias=\"0.0\" />\n\n    <com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/bottomNav\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"1dp\"\n        android:layout_marginTop=\"367dp\"\n        android:background=\"#d3d3d3\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/button\"\n        app:menu=\"@menu/bottom_nav\" />\n</androidx.constraintlayout.widget.ConstraintLayout>\n
+===================================================================
+--- app/src/main/res/layout/activity_view_history.xml	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/res/layout/fragment_third.xml	(date 1606098483135)
+@@ -4,7 +4,7 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"
+-    tools:context=".ViewHistory">
++    tools:context="com.example.cps731project.MainActivity">
+ 
+     <TextView
+         android:id="@+id/textView4"
+@@ -53,16 +53,5 @@
+         app:layout_constraintTop_toBottomOf="@+id/textView"
+         app:layout_constraintVertical_bias="0.0" />
+ 
+-    <com.google.android.material.bottomnavigation.BottomNavigationView
+-        android:id="@+id/bottomNav"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginBottom="1dp"
+-        android:layout_marginTop="367dp"
+-        android:background="#d3d3d3"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/button"
+-        app:menu="@menu/bottom_nav" />
+-</androidx.constraintlayout.widget.ConstraintLayout>
++
++</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/cps731project/FirstFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/FirstFragment.java	(date 1606098483018)
++++ app/src/main/java/com/example/cps731project/FirstFragment.java	(date 1606098483018)
+@@ -0,0 +1,63 @@
++package com.example.cps731project;
++
++import android.os.Bundle;
++import androidx.fragment.app.Fragment;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link FirstFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ *
++ */
++public class FirstFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment FirstFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static FirstFragment newInstance(String param1, String param2) {
++        FirstFragment fragment = new FirstFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    public FirstFragment() {
++        // Required empty public constructor
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_first, container, false);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/cps731project/secondFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/secondFragment.java	(date 1606098483065)
++++ app/src/main/java/com/example/cps731project/secondFragment.java	(date 1606098483065)
+@@ -0,0 +1,64 @@
++package com.example.cps731project;
++
++import android.os.Bundle;
++
++import androidx.fragment.app.Fragment;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link secondFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ */
++public class secondFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    public secondFragment() {
++        // Required empty public constructor
++    }
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment secondFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static secondFragment newInstance(String param1, String param2) {
++        secondFragment fragment = new secondFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_second, container, false);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/cps731project/ViewFavourites.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.cps731project;\n\nimport android.annotation.SuppressLint;\nimport android.content.Intent;\nimport android.os.Bundle;\nimport android.view.MenuItem;\nimport android.widget.Button;\nimport android.widget.TextView;\n\nimport com.google.android.material.bottomnavigation.BottomNavigationView;\n\nimport androidx.annotation.NonNull;\nimport androidx.appcompat.app.AppCompatActivity;\n\npublic class ViewFavourites extends AppCompatActivity {\n    @Override\n    protected void onCreate(Bundle savedInstanceState) {\n        super.onCreate(savedInstanceState);\n        setContentView(R.layout.activity_view_favs);\n\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/ViewFavourites.java	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/java/com/example/cps731project/ViewFavourites.java	(date 1606098483053)
+@@ -16,7 +16,7 @@
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_view_favs);
++        //setContentView(R.layout.activity_view_favs);
+ 
+     }
+ }
+Index: app/src/main/res/navigation/my_nav.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/navigation/my_nav.xml	(date 1606098483173)
++++ app/src/main/res/navigation/my_nav.xml	(date 1606098483173)
+@@ -0,0 +1,27 @@
++<?xml version="1.0" encoding="utf-8"?>
++<navigation xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/my_nav"
++    app:startDestination="@id/firstFragment">
++    <fragment
++        android:id="@+id/firstFragment"
++        android:name="com.example.cps731project.FirstFragment"
++        android:label="fragment_first"
++        tools:layout="@layout/fragment_first" />
++    <fragment
++        android:id="@+id/secondFragment"
++        android:name="com.example.cps731project.secondFragment"
++        android:label="fragment_second"
++        tools:layout="@layout/fragment_second" />
++    <fragment
++        android:id="@+id/thirdFragment"
++        android:name="com.example.cps731project.thirdFragment"
++        android:label="fragment_third"
++        tools:layout="@layout/fragment_third" />
++    <activity
++        android:id="@+id/viewAccount"
++        android:name="com.example.cps731project.ViewAccount"
++        android:label="activity_view_account"
++        tools:layout="@layout/activity_view_account" />
++</navigation>
+\ No newline at end of file
+Index: app/src/main/java/com/example/cps731project/thirdFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/cps731project/thirdFragment.java	(date 1606098483163)
++++ app/src/main/java/com/example/cps731project/thirdFragment.java	(date 1606098483163)
+@@ -0,0 +1,64 @@
++package com.example.cps731project;
++
++import android.os.Bundle;
++
++import androidx.fragment.app.Fragment;
++
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++
++/**
++ * A simple {@link Fragment} subclass.
++ * Use the {@link thirdFragment#newInstance} factory method to
++ * create an instance of this fragment.
++ */
++public class thirdFragment extends Fragment {
++
++    // TODO: Rename parameter arguments, choose names that match
++    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
++    private static final String ARG_PARAM1 = "param1";
++    private static final String ARG_PARAM2 = "param2";
++
++    // TODO: Rename and change types of parameters
++    private String mParam1;
++    private String mParam2;
++
++    public thirdFragment() {
++        // Required empty public constructor
++    }
++
++    /**
++     * Use this factory method to create a new instance of
++     * this fragment using the provided parameters.
++     *
++     * @param param1 Parameter 1.
++     * @param param2 Parameter 2.
++     * @return A new instance of fragment thirdFragment.
++     */
++    // TODO: Rename and change types and number of parameters
++    public static thirdFragment newInstance(String param1, String param2) {
++        thirdFragment fragment = new thirdFragment();
++        Bundle args = new Bundle();
++        args.putString(ARG_PARAM1, param1);
++        args.putString(ARG_PARAM2, param2);
++        fragment.setArguments(args);
++        return fragment;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        if (getArguments() != null) {
++            mParam1 = getArguments().getString(ARG_PARAM1);
++            mParam2 = getArguments().getString(ARG_PARAM2);
++        }
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_third, container, false);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<androidx.constraintlayout.widget.ConstraintLayout\n    xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\n    android:layout_width=\"match_parent\"\n    android:layout_height=\"match_parent\"\n    android:id=\"@+id/mainActivity\">\n\n    <TextView\n        android:id=\"@+id/whatToEat\"\n        android:layout_width=\"wrap_content\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginBottom=\"395dp\"\n        android:layout_marginTop=\"168dp\"\n        android:text=\"@string/whatToEat\"\n        android:textSize=\"30sp\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toTopOf=\"parent\" />\n\n    <Spinner\n        android:id=\"@+id/mealType\"\n        android:layout_width=\"226dp\"\n        android:layout_height=\"52dp\"\n        android:layout_marginBottom=\"332dp\"\n        android:layout_marginEnd=\"10dp\"\n        android:layout_marginLeft=\"37dp\"\n        android:layout_marginRight=\"10dp\"\n        android:layout_marginStart=\"37dp\"\n        android:layout_marginTop=\"16dp\"\n        android:entries=\"@array/meals\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toStartOf=\"@+id/btnGo\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/whatToEat\" />\n\n    <Button\n        android:id=\"@+id/btnGo\"\n        android:layout_width=\"91dp\"\n        android:layout_height=\"53dp\"\n        android:layout_marginBottom=\"331dp\"\n        android:layout_marginEnd=\"36dp\"\n        android:layout_marginLeft=\"10dp\"\n        android:layout_marginRight=\"36dp\"\n        android:layout_marginStart=\"10dp\"\n        android:layout_marginTop=\"16dp\"\n        android:text=\"@string/btnGo\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toEndOf=\"@+id/mealType\"\n        app:layout_constraintTop_toBottomOf=\"@+id/whatToEat\" />\n\n    <com.google.android.material.bottomnavigation.BottomNavigationView\n        android:id=\"@+id/bottomNav\"\n        android:layout_width=\"match_parent\"\n        android:layout_height=\"wrap_content\"\n        android:layout_marginTop=\"274dp\"\n        android:background=\"#d3d3d3\"\n        app:layout_constraintBottom_toBottomOf=\"parent\"\n        app:layout_constraintEnd_toEndOf=\"parent\"\n        app:layout_constraintStart_toStartOf=\"parent\"\n        app:layout_constraintTop_toBottomOf=\"@+id/btnGo\"\n        app:menu=\"@menu/bottom_nav\" />\n\n\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/activity_main.xml	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/res/layout/activity_main.xml	(date 1606098483115)
+@@ -51,17 +51,5 @@
+         app:layout_constraintStart_toEndOf="@+id/mealType"
+         app:layout_constraintTop_toBottomOf="@+id/whatToEat" />
+ 
+-    <com.google.android.material.bottomnavigation.BottomNavigationView
+-        android:id="@+id/bottomNav"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="274dp"
+-        android:background="#d3d3d3"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toBottomOf="@+id/btnGo"
+-        app:menu="@menu/bottom_nav" />
+-
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/values/strings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><resources>\n    <string name=\"app_name\">CPS731Project</string>\n    <string name=\"ezFood\">EZ Food</string>\n    <string name=\"createAccount\">Create An Account</string>\n    <string name=\"email\">Email</string>\n    <string name=\"password\">Password</string>\n    <string name=\"loginHere\">Please Login</string>\n    <string name=\"login\">LOGIN</string>\n    <string name=\"dontHaveAccount\">Don\\'t have an account? Create one here</string>\n    <string name=\"addIngredient\">Add Ingredient</string>\n    <string name=\"btnAdd\">ADD</string>\n    <string name=\"whatToEat\">What do you want to eat?</string>\n    <string name=\"ingredientsYouHave\">Ingredients You Have</string>\n    <string name=\"btnGo\">GO</string>\n    <string name=\"btnLogout\">LOGOUT</string>\n    <string name=\"btnDeleteAcc\">DELETE ACCOUNT</string>\n    <string name=\"myAccount\">My Account</string>\n    <string name=\"account\">Account</string>\n    <string name=\"txtName\">Name</string>\n    <string name=\"txtEmail\">Email</string>\n    <string name=\"txtRatings\">Ratings</string>\n    <string name=\"favourites\">Favourites</string>\n    <string name=\"none\">No favourites yet</string>\n    <string name=\"deleteAll\">DELETE ALL FAVOURITES</string>\n    <string name=\"history\">History</string>\n    <string name=\"none2\">No history yet</string>\n    <string name=\"deleteAll2\">DELETE ALL HISTORY</string>\n    <string name=\"home\">Home</string>\n    <string-array name=\"meals\">\n        <item>Snack</item>\n        <item>Breakfast</item>\n        <item>Lunch</item>\n        <item>Dinner</item>\n    </string-array>\n    <string name=\"title_activity_show_recipe\">ShowRecipe</string>\n    <!-- Strings used for fragments for navigation -->\n    <string name=\"first_fragment_label\">First Fragment</string>\n    <string name=\"second_fragment_label\">Second Fragment</string>\n    <string name=\"next\">Next</string>\n    <string name=\"previous\">Previous</string>\n\n    <string name=\"hello_first_fragment\">Hello first fragment</string>\n    <string name=\"hello_second_fragment\">Hello second fragment. Arg: %1$s</string>\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/values/strings.xml	(revision f078431dd4463f0dcacc20d4aaf4ac00b2042fbe)
++++ app/src/main/res/values/strings.xml	(date 1606098483195)
+@@ -26,6 +26,8 @@
+     <string name="none2">No history yet</string>
+     <string name="deleteAll2">DELETE ALL HISTORY</string>
+     <string name="home">Home</string>
++    <string name="hello_blank_fragment">Hello blank fragment</string>
++    <!-- TODO: Remove or change this placeholder text -->
+     <string-array name="meals">
+         <item>Snack</item>
+         <item>Breakfast</item>
