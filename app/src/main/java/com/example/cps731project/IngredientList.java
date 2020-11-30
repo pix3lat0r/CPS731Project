@@ -18,6 +18,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,8 +38,7 @@ public class IngredientList extends AppCompatActivity {
 
     private IngredientAdapter adapter;
     private EditText ingred;
-    //private Button search;
-    //DocumentReference doc;
+    private Button search;
     final String id = UserID.user_id;
 
     @Override
@@ -74,7 +74,7 @@ public class IngredientList extends AppCompatActivity {
         });
 
         db = FirebaseFirestore.getInstance();
-        CollectionReference recipe = db.collection("recipes");
+        final CollectionReference recipe = db.collection("recipes");
 
         //Adding ingredients to Firestore
         ingred = findViewById(R.id.addIngredient);
@@ -84,6 +84,11 @@ public class IngredientList extends AppCompatActivity {
             public void onClick(View v) {
                 ingredient = ingred.getText().toString();
 
+                if (ingredient.isEmpty()) {
+                    ingred.setError("Field cannot be empty");
+                    ingred.requestFocus();
+                }
+                else{
                 Map<String, Object> ingredients = new HashMap<>();
                 ingredients.put(KEY_TITLE, ingredient);
 
@@ -104,6 +109,7 @@ public class IngredientList extends AppCompatActivity {
                         });
                 ingred.getText().clear();
             }
+            }
         });
 
         //calling recycler view method
@@ -111,32 +117,20 @@ public class IngredientList extends AppCompatActivity {
 
 
         //search button
-       /* search = findViewById(R.id.btnsearch);
+        search = findViewById(R.id.btnSearch);
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recipe.get()
-                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                db.collection("users").document(id).collection("ingredients").get()
-                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                            @Override
-                                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                                            }
-                                        });
-                            }
-                        });
+                startActivity(new Intent(IngredientList.this, ShowRecipe.class));
             }
-        });*/
+        });
 
     }
 
 
     private void setUpRecyclerView(){
 
-        Query query = db.collection("users").document(id).collection("ingredients");
+        Query query = db.collection("users").document(id).collection("ingredients").orderBy("name");
 
         FirestoreRecyclerOptions<IngredientsModel> options = new FirestoreRecyclerOptions.Builder<IngredientsModel>()
                 .setQuery(query, IngredientsModel.class)

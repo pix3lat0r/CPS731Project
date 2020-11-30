@@ -1,17 +1,18 @@
 package com.example.cps731project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeModel {
     String name;
-    List<String> ingredients;
-    String instructions;
+    ArrayList<String> ingredients;
+    ArrayList<String> instructions;
 
     public RecipeModel(){
 
     }
 
-    public RecipeModel(String name, List<String> ingredients, String instructions){
+    public RecipeModel(String name, ArrayList<String> ingredients, ArrayList<String> instructions){
         this.name = name;
         this.ingredients = ingredients;
         this.instructions = instructions;
@@ -25,15 +26,15 @@ public class RecipeModel {
         this.name = name;
     }
 
-    public String getInstructions() {
+    public ArrayList<String> getInstructions() {
         return instructions;
     }
 
-    public void setInstructions(String instructions) {
+    public void setInstructions(ArrayList<String> instructions) {
         this.instructions = instructions;
     }
 
-    public List<String> getIngredients() {
+    public ArrayList<String> getIngredients() {
         return ingredients;
     }
 }

@@ -9,11 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewHistory"></activity>
+        <activity android:name=".ViewRecipe"
+            android:parentActivityName=".ShowRecipe"/>
+        <activity android:name=".ViewHistory"/>
         <activity android:name=".ViewFavourites" />
         <activity android:name=".ShowRecipe" />
         <activity android:name=".ViewAccount" />
-        <activity android:name=".IngredientList" />
+        <activity android:name=".IngredientList" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".Login" />
         <activity android:name=".MainActivity" />
         <activity android:name=".SignUp">

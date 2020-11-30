@@ -4,9 +4,9 @@ public class IngredientsModel {
 
     private String name;
 
-    private IngredientsModel(){}
+    public IngredientsModel(){}
 
-    private IngredientsModel(String name){
+    public IngredientsModel(String name){
         this.name = name;
     }
 
