@@ -27,8 +27,6 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.google.firebase.auth.FirebaseAuth;
-
 public class SignUp extends AppCompatActivity {
     private static final String TAG = "TAG";
     //public static final String EMAIL_KEY = "email";

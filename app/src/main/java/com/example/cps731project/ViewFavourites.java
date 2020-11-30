@@ -45,7 +45,7 @@ public class ViewFavourites extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.grocery:
-                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), TestActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewFavourites:

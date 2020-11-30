@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
@@ -14,6 +15,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // Read the API key from ./secure.properties into R.string.maps_api_key
+        def secureProps = new Properties()
+        if (file("../secure.properties").exists()) {
+            file("../secure.properties")?.withInputStream { secureProps.load(it) }
+        }
+        resValue "string", "maps_api_key", (secureProps.getProperty("MAPS_API_KEY") ?: "")
     }
 
     buildTypes {
@@ -38,11 +46,15 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation platform('com.google.firebase:firebase-bom:26.0.0')
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
     implementation 'com.google.firebase:firebase-analytics'
+    //implementation 'com.google.firebase:firebase-analytics:18.0.0'
     implementation 'com.google.firebase:firebase-firestore:22.0.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.firebaseui:firebase-ui-firestore:6.2.1'
-    implementation 'com.google.maps:google-maps-services:0.11.0'
-    androidTestImplementation 'androidx.test:rules:1.3.0-beta01'
+    //implementation 'com.google.maps:google-maps-services:0.11.0'
+    implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-basement:17.5.0'
+    androidTestImplementation 'androidx.test:rules:1.3.1-alpha02'
 }

@@ -32,6 +32,9 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="title_activity_maps">Map</string>
+    <string name="todo">TODO</string>
+    <string name="gps">GPS</string>
+    <string name="click">Search grocery stores near me</string>
     <string-array name="meals">
         <item>Snack</item>
         <item>Breakfast</item>
