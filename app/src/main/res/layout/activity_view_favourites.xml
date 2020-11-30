@@ -2,52 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewFavourites">
-
-    <Button
-        android:id="@+id/deleteFavs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="425dp"
-        android:layout_marginEnd="216dp"
-        android:layout_marginLeft="42dp"
-        android:layout_marginRight="216dp"
-        android:layout_marginStart="42dp"
-        android:text="@string/deleteAll"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favDescription"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/favDescription"
-        android:layout_width="386dp"
-        android:layout_height="52dp"
-        android:layout_marginBottom="474dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="49dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="49dp"
-        android:layout_marginTop="1dp"
-        android:text="@string/none"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/favourites"
-        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/favourites"
         android:layout_width="392dp"
         android:layout_height="47dp"
-        android:layout_marginBottom="529dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="32dp"
+        android:layout_marginBottom="529dp"
         android:text="@string/favourites"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,16 +21,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_recyclerView"
+        android:layout_width="297dp"
+        android:layout_height="347dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/favourites" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="433dp"
         android:background="#d3d3d3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deleteFavs"
         app:menu="@menu/bottom_nav" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

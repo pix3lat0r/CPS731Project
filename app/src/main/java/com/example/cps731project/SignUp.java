@@ -110,6 +110,7 @@ public class SignUp extends AppCompatActivity {
                                                 //saving the email as the userid
                                                 UserID test = new UserID();
                                                 test.setUserID(email);
+                                                test.setName(name);
                                                 //startActivity(new Intent(SignUp.this, SignUp.class));
                                             }
                                         })
