@@ -7,6 +7,12 @@
         android:icon="@drawable/ic_home" />
 
     <item
+        android:id="@+id/grocery"
+        android:title="@string/grocery"
+        android:icon="@drawable/ic_grocery"
+        />
+
+    <item
         android:id="@+id/viewFavourites"
         android:title="@string/favourites"
         android:icon="@drawable/ic_favorite" />

@@ -27,9 +27,11 @@
     <string name="deleteAll2">DELETE ALL HISTORY</string>
     <string name="home">Home</string>
     <string name="search">Search</string>
+    <string name="grocery">Grocery</string>
     <string name="title_activity_show_recipe">ShowRecipe</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="title_activity_maps">Map</string>
     <string-array name="meals">
         <item>Snack</item>
         <item>Breakfast</item>

@@ -1,36 +1,22 @@
 package com.example.cps731project;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Region;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class ViewAccount extends AppCompatActivity {
 
     FirebaseFirestore db;
-    private TextView email, name;
-    private Button logout;
-    private Button deleteAcc;
     DocumentReference doc;
 
     @Override
@@ -39,6 +25,7 @@ public class ViewAccount extends AppCompatActivity {
         setContentView(R.layout.activity_view_account);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setSelectedItemId(R.id.viewAccount);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
             @Override
@@ -46,6 +33,10 @@ public class ViewAccount extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.mainActivity:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.grocery:
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewFavourites:
@@ -57,77 +48,56 @@ public class ViewAccount extends AppCompatActivity {
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewAccount:
-                        startActivity(new Intent(getApplicationContext(), ViewAccount.class));
-                        overridePendingTransition(0, 0);
                         return true;
                 }
                 return false;
             }
         });
 
-        email = findViewById(R.id.txtEmail);
-        name = findViewById(R.id.txtName);
-
         final String id = UserID.user_id;
-        final String username = UserID.name;
-
-        name.setText(username);
-        email.setText("Email: " + id);
-
         db = FirebaseFirestore.getInstance();
         doc = db.collection("users").document(id);
 
 
+        /*final TextView userNameTxt = (TextView) findViewById(R.id.txtName);
+        final TextView userEmailTxt = (TextView) findViewById(R.id.txtEmail);
+        doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String userName = documentSnapshot.getString("name");
+                String userEmail = documentSnapshot.getString("email");
+                userNameTxt.setText(userName);
+                userEmailTxt.setText(userEmail);
+            }
+        });*/
+
         //LOGOUT BUTTON
-        logout = findViewById(R.id.btnLogout);
+        Button logout = findViewById(R.id.btnLogout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(ViewAccount.this);
-                myAlertBuilder.setTitle("Logout");
-                myAlertBuilder.setMessage("Are you sure you want to log out?");
-                myAlertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ViewAccount.this, "Logged out successfully!", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(ViewAccount.this, Login.class));
-                        //startActivity(new Intent(ViewAccount.this, MainActivity.class));
-                    }
-                });
-
-                myAlertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ViewAccount.this, "You are still logged in!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                myAlertBuilder.show();
+                startActivity(new Intent(ViewAccount.this, Login.class));
             }
         });
 
         //DELETE ACCOUNT BUTTON
-        deleteAcc = findViewById(R.id.btnDeleteAcc);
+        Button deleteAcc = findViewById(R.id.btnDeleteAcc);
         deleteAcc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(ViewAccount.this);
-                alertBuilder.setTitle("Delete Account");
-                alertBuilder.setMessage("Are you sure you want to delete your account? \n\nThis action CANNOT be undone");
-                alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                /*CollectionReference usersRef = db.collection("users");
+                Query query = usersRef.whereEqualTo("email", id);
+                query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doc.delete();
-                        Toast.makeText(ViewAccount.this, "Your account has been deleted", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(ViewAccount.this, SignUp.class));
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            doc.delete();
+                        }
                     }
-                });
-                alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(ViewAccount.this, "Your account has NOT been deleted", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                alertBuilder.show();
+                });*/
+
+                doc.delete();
+                startActivity(new Intent(ViewAccount.this, Login.class));
             }
         });
     }

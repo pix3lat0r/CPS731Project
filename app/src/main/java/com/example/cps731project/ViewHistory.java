@@ -28,6 +28,10 @@ public class ViewHistory extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
+                    case R.id.grocery:
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
                     case R.id.viewFavourites:
                         startActivity(new Intent(getApplicationContext(), ViewFavourites.class));
                         overridePendingTransition(0, 0);
