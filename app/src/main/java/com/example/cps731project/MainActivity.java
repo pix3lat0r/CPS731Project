@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.mainActivity:
                         return true;
+                    case R.id.grocery:
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
                     case R.id.viewFavourites:
                         startActivity(new Intent(getApplicationContext(), ViewFavourites.class));
                         overridePendingTransition(0, 0);

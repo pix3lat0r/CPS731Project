@@ -1,8 +1,5 @@
 package com.example.cps731project;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +13,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-//import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -24,10 +20,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+//import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUp extends AppCompatActivity {
     private static final String TAG = "TAG";
@@ -110,7 +110,7 @@ public class SignUp extends AppCompatActivity {
                                                 //saving the email as the userid
                                                 UserID test = new UserID();
                                                 test.setUserID(email);
-                                                startActivity(new Intent(SignUp.this, MainActivity.class));
+                                                //startActivity(new Intent(SignUp.this, SignUp.class));
                                             }
                                         })
                                         .addOnFailureListener(new OnFailureListener() {

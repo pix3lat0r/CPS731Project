@@ -6,12 +6,9 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
@@ -36,6 +33,10 @@ public class ViewAccount extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.mainActivity:
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        overridePendingTransition(0, 0);
+                        return true;
+                    case R.id.grocery:
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                         overridePendingTransition(0, 0);
                         return true;
                     case R.id.viewFavourites:
